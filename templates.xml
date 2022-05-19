@@ -30,4 +30,14 @@
     <properties key="category" value="Example|Wi-Fi"/>
     <properties key="quality" value="Evaluation"/>
   </descriptors>
+  <descriptors name="multiprotocol_micriumos" label="Platform - Multiprotocol (Wi-Fi + BLE) on Micrium OS kernel" description="This example provides a MicriumOS-based example using multiple protocols (Wi-Fi + BLE) to do something as simple as toggling LEDs.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="projectFilePaths" value="multiprotocol/multiprotocol.slcp"/>
+    <properties key="boardCompatibility" value="brd2204a brd4161a brd4162a brd4163a brd4164a brd4321a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efm32gg11b.* .*efr32mg12p.* .*wgm160.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Example|Wi-Fi"/>
+    <properties key="quality" value="Evaluation"/>
+  </descriptors>
 </model:MDescriptors>
