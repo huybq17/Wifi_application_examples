@@ -1,11 +1,25 @@
 project_name: multiprotocol_micriumos
-label: wifi_cli_micriumos
+label: multiprotocol_micriumos
 description: >
-  This example project provides a Command Line Interface (CLI) to interact with the Wi-Fi FMAC driver and the LwIP APIs.
+  This example provides a MicriumOS-based example using multiple protocols (Wi-Fi + BLE) to do something as simple as toggling LEDs.
+
 category: Example|Platform
 package: platform
-quality: evaluation
+quality: sample
 component:
+  - id: bluetooth_stack
+  - id: gatt_configuration
+  - id: bluetooth_feature_advertiser
+  - id: bluetooth_feature_connection
+  - id: bluetooth_feature_gatt_server
+  - id: bluetooth_feature_sm
+  - id: bluetooth_feature_system
+  - id: ota_dfu
+  - id: bootloader_interface
+  - id: rail_util_pti
+  - id: app_log
+  - id: app_assert
+  - id: mpu
   - id: simple_button
     instance: [btn0, btn1]
   - id: cli
@@ -50,8 +64,6 @@ source:
     folder: wifi_cli
   - path: wifi_cli/wifi_cli_params.c
     folder: wifi_cli
-  - path: rf_test_agent/sl_wfx_rf_test_agent.c
-    folder: rf_test_agent
   - path: lwip_host/ethernetif.c
     folder: lwip_host
   - path: lwip_host/apps/dhcp_client.c
@@ -77,10 +89,6 @@ include:
         folder: wifi_cli
       - path: wifi_cli_params.h
         folder: wifi_cli
-  - path: rf_test_agent 
-    file_list:
-      - path: sl_wfx_rf_test_agent.h
-        folder: rf_test_agent
   - path: lwip_host
     file_list:
       - path: ethernetif.h
@@ -94,9 +102,21 @@ include:
   - path: lwip_host/apps
     file_list:
       - path: dhcp_client.h
-        folder: lwip_host/app
+        folder: lwip_host/apps
       - path: dhcp_server.h
-        folder: lwip_host/app
+        folder: lwip_host/apps
+
+config_file:
+  - override:
+      component: gatt_configuration
+      file_id: gatt_configuration_file_id
+    path: bluetooth/gatt_configuration.btconf
+    directory: btconf
+
+other_file:
+  - path: bluetooth/create_bl_files.bat
+  - path: bluetooth/create_bl_files.sh  
+
 configuration:
   - name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
     value: usartHwFlowControlNone
