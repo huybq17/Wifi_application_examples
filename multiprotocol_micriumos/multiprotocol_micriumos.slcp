@@ -49,7 +49,7 @@ component:
   - id: lwip_netif_ethernet
   - id: lwip_app_http
   - id: wfx_secure_link
-  - id: nvm3_default
+  - id: nvm3_default  
 source:
   - path: main.c
   - path: app.c
@@ -70,8 +70,6 @@ source:
     folder: lwip_host/apps
   - path: lwip_host/apps/dhcp_server.c
     folder: lwip_host/apps
-  - path: lwip_host/lwiperf/lwiperf.c
-    folder: lwip_host/lwiperf
 include:
   - path: .
     file_list:
@@ -95,10 +93,6 @@ include:
         folder: lwip_host
       - path: lwipopts.h
         folder: lwip_host
-  - path: lwip_host/lwiperf
-    file_list:
-      - path: lwiperf.h
-        folder: lwip_host/lwiperf
   - path: lwip_host/apps
     file_list:
       - path: dhcp_client.h
@@ -146,6 +140,12 @@ configuration:
     value: 256
   - name: SL_CLI_INST_TASK_STACK_SIZE
     value: 800
+  - name: SL_PSA_KEY_USER_SLOT_COUNT
+    value: "0"
+    condition: [psa_crypto]
+  - name: SL_WFX_SLK_CURVE25519
+    value: "0"
+    condition: [wfx_secure_link]
 define:
   - name: DEBUG_EFM
 tag:

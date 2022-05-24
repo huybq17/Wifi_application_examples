@@ -25,9 +25,7 @@
 #include "nvm3_default.h"
 #include "sl_wfx_constants.h"
 
-#if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
-#error "Power Save must be enabled through the CLI not the Power manager component"
-#endif
+
 
 /*******************************************************************************
  *****************************   LOG DEBUG   ***********************************

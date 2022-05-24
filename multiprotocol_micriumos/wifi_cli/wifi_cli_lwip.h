@@ -28,7 +28,6 @@
 #include "lwip/inet.h"
 #include "lwip/inet_chksum.h"
 #include "lwip/ip.h"
-#include "lwiperf.h"
 
 #define IPERF_DEFAULT_DURATION_SEC          10
 #define IPERF_DEFAULT_PORT                  5001

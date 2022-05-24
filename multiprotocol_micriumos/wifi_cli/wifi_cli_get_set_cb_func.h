@@ -25,7 +25,7 @@
 #include "sl_cli_instances.h"
 #include "sl_cli_arguments.h"
 #include "sl_cli_handles.h"
-#include "sl_wfx_rf_test_agent.h"
+
 #include "sl_wfx_host.h"
 #include "sl_wfx_constants.h"
 #include "lwip/netif.h"

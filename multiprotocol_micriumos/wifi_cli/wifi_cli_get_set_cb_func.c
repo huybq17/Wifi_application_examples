@@ -1648,7 +1648,8 @@ void iperf(sl_cli_command_arg_t *args)
               goto error;
           }
           /* Start iperf server*/
-          return iperf_server();
+          // return iperf_server();
+          return NULL;
 
       } else if (strncmp(argv_str, "-c", 2) == 0) { /*!< In iperf client mode */
           /* Parsing client arguments with fall-through */
@@ -1686,10 +1687,11 @@ void iperf(sl_cli_command_arg_t *args)
                   }
               }
               /* Start iperf client mode */
-              return iperf_client(ip_str,
-                                  (uint32_t)duration,
-                                  (uint32_t)srv_port,
-                                  iperf_client_foreground_mode);
+              // return iperf_client(ip_str,
+              //                     (uint32_t)duration,
+              //                     (uint32_t)srv_port,
+              //                     iperf_client_foreground_mode);
+              return NULL;
           }
       }
       /* go to error */
@@ -1705,7 +1707,7 @@ error:
 void iperf_server_stop(sl_cli_command_arg_t *args)
 {
   (void)args;
-  stop_iperf_server();
+  // stop_iperf_server();
 }
 
 /**************************************************************************//**
@@ -1714,7 +1716,7 @@ void iperf_server_stop(sl_cli_command_arg_t *args)
 void iperf_client_stop(sl_cli_command_arg_t *args)
 {
   (void)args;
-  stop_iperf_client();
+  // stop_iperf_client();
 }
 
 /**************************************************************************//**
@@ -1723,8 +1725,8 @@ void iperf_client_stop(sl_cli_command_arg_t *args)
 void wifi_test_agent(sl_cli_command_arg_t *args)
 {
   int argc = sl_cli_get_argument_count(args) + 2;
-  sl_wfx_rf_test_agent_init(&rx_stats);
-  sl_wfx_rf_test_agent(&wifi, argc, (char**)args->argv);
+  // sl_wfx_rf_test_agent_init(&rx_stats);
+  // sl_wfx_rf_test_agent(&wifi, argc, (char**)args->argv);
 }
 
 /**************************************************************************//**
