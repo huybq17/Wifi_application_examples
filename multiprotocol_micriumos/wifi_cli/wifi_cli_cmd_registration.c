@@ -118,12 +118,6 @@ static const sl_cli_command_info_t cli_cmd_get_station_ip = \
                    "station.ip" SL_CLI_UNIT_SEPARATOR,
                    {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
 
-static const sl_cli_command_info_t cli_cmd_get_station_pmk = \
-    SL_CLI_COMMAND(get_station_pmk,
-                   "Get station pairwise master key",
-                   "station.ip" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
 static const sl_cli_command_info_t cli_cmd_get_station_mac = \
     SL_CLI_COMMAND(get_station_mac,
                    "Get station MAC address",
@@ -172,12 +166,6 @@ static const sl_cli_command_info_t cli_cmd_get_softap_ip = \
                   "softap.ip" SL_CLI_UNIT_SEPARATOR,
                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
 
-static const sl_cli_command_info_t cli_cmd_get_softap_pmk = \
-   SL_CLI_COMMAND(get_softap_pmk,
-                  "Get SoftAP pairwise master key",
-                  "softap.pmk" SL_CLI_UNIT_SEPARATOR,
-                  {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
 static const sl_cli_command_info_t cli_cmd_get_softap_mac = \
    SL_CLI_COMMAND(get_softap_mac,
                   "Get SoftAP MAC address (EUI-48 format)",
@@ -210,8 +198,7 @@ static const sl_cli_command_entry_t cmd_get_grp_table[] = {
     {"station.dhcp_client_state", &cli_cmd_get_station_dhcp_client_state, false},
     {"station.netmask", &cli_cmd_get_station_netmask, false},
     {"station.gateway", &cli_cmd_get_station_gateway, false},
-    {"station.ip", &cli_cmd_get_station_ip, false},
-    {"station.pmk", &cli_cmd_get_station_pmk, false},
+    {"station.ip", &cli_cmd_get_station_ip, false},    
     {"station.mac", &cli_cmd_get_station_mac, false},
     {"softap.ssid", &cli_cmd_get_softap_ssid, false},
     {"softap.passkey", &cli_cmd_get_softap_passkey, false},
@@ -219,8 +206,7 @@ static const sl_cli_command_entry_t cmd_get_grp_table[] = {
     {"softap.channel", &cli_cmd_get_softap_channel, false},
     {"softap.netmask", &cli_cmd_get_softap_netmask, false},
     {"softap.gateway", &cli_cmd_get_softap_gateway, false},
-    {"softap.ip", &cli_cmd_get_softap_ip, false},
-    {"softap.pmk", &cli_cmd_get_softap_pmk, false},
+    {"softap.ip", &cli_cmd_get_softap_ip, false},    
     {"softap.mac", &cli_cmd_get_softap_mac, false},
     {"softap.dhcp_server_state", &cli_cmd_get_softap_dhcp_server_state, false},
     {"softap.client_list", &cli_cmd_get_softap_client_list, false},
@@ -338,11 +324,6 @@ static const sl_cli_command_info_t cli_cmd_set_softap_dhcp_server_state = \
                   "softap.dhcp_client_state" SL_CLI_UNIT_SEPARATOR,
                   {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
 
-static const sl_cli_command_info_t cli_cmd_set_mac_key = \
-   SL_CLI_COMMAND(set_mac_key,
-                  "Secure Link MAC key (32 bytes hex array format)",
-                  "wifi.mac_key" SL_CLI_UNIT_SEPARATOR,
-                  {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
 
 /**************************************************************************//**
  * @brief: Grouping all set commands
@@ -364,8 +345,7 @@ static const sl_cli_command_entry_t cmd_set_grp_table[] = {
     {"softap.gateway", &cli_cmd_set_softap_gateway, false},
     {"softap.ip", &cli_cmd_set_softap_ip, false},
     {"softap.mac", &cli_cmd_set_softap_mac, false},
-    {"softap.dhcp_server_state", &cli_cmd_set_softap_dhcp_server_state, false},
-    {"wifi.mac_key", &cli_cmd_set_mac_key, false},
+    {"softap.dhcp_server_state", &cli_cmd_set_softap_dhcp_server_state, false},    
     {NULL, NULL, false}
 };
 
@@ -444,69 +424,7 @@ static const sl_cli_command_info_t cli_cmd_wifi_softap_rssi = \
                    "(MAC format: 00:00:00:00:00:00)" SL_CLI_UNIT_SEPARATOR,
                    {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
 
-/**************************************************************************//**
- * @brief: Construct wifi powermode, powersave commands
- ******************************************************************************/
-static const sl_cli_command_info_t cli_cmd_wifi_power_mode = \
-    SL_CLI_COMMAND(wifi_station_power_mode,
-                   "Set the Power Mode on the WLAN interface "
-                   "of the Wi-Fi chip",
-                   "Usage: [ACTIVE] | [BEACONS | DTIM] [UAPSD | FAST_PS] "
-                   "<number of beacons/DTIMs>"
-                   SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_STRING, SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
 
-static const sl_cli_command_info_t cli_cmd_wifi_station_power_save = \
-    SL_CLI_COMMAND(wifi_station_power_save,
-                   "Enable/disable the Power Save on the WLAN interface "
-                   "of the Wi-Fi chip ",
-                   "wifi powersave <state>" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
-
-/**************************************************************************//**
- * @brief: Construct the wifi RF test command
- ******************************************************************************/
-static const sl_cli_command_info_t cli_cmd_wifi_test_agent = \
-    SL_CLI_COMMAND(wifi_test_agent,
-                   "Send a command to the RF Test Agent",
-                   "Usage: wifi test <cmd> [cmd_args]" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-/**************************************************************************//**
- * @brief: Construct the wifi secure_link-related commands
- ******************************************************************************/
-static const sl_cli_command_info_t cli_cmd_wifi_slk_rekey = \
-    SL_CLI_COMMAND(wifi_slk_rekey,
-                   "Renegotiate Secure Link session key",
-                   "Renegotiate Secure Link session key" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_wifi_slk_add = \
-    SL_CLI_COMMAND(wifi_slk_add,
-                   "Enable the encryption of API General messages "
-                   "with the specified \"msg_id\"",
-                   "slk_add <msg_id>" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_wifi_slk_remove = \
-    SL_CLI_COMMAND(wifi_slk_remove,
-                   "Disable the encryption of API General messages "
-                   "with the specified \"msg_id\"",
-                   "slk_remove <msg_id>" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_wifi_slk_bitmap = \
-    SL_CLI_COMMAND(wifi_slk_bitmap,
-                   "Display the current state of the Secure Link Encryption Bitmap",
-                   "slk_bitmap <msg_id>" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_wifi_wlan_rate_algo = \
-    SL_CLI_COMMAND(wifi_wlan_rate_algo,
-                   "Configure the rate algorithm to use"
-                   "rate-algo <state>",
-                   "state: 0(AARF), 1(minstrel)" SL_CLI_UNIT_SEPARATOR,
-                   {SL_CLI_ARG_UINT8, SL_CLI_ARG_END, });
 /**************************************************************************//**
  * @brief: Grouping all wifi commands
  ******************************************************************************/
@@ -520,16 +438,8 @@ static const sl_cli_command_entry_t wifi_cli_cmds_table[] = {
     {"station_rssi", &cli_cmd_wifi_sta_rssi, false},
     {"start_softap", &cli_cmd_wifi_start_softap, false},
     {"stop_softap", &cli_cmd_wifi_stop_softap, false},
-    {"softap_rssi", &cli_cmd_wifi_softap_rssi, false},
-    {"powermode", &cli_cmd_wifi_power_mode, false},
-    {"powersave", &cli_cmd_wifi_station_power_save, false},
-    {"test", &cli_cmd_wifi_test_agent, false},
-    {"slk_renegotiate", &cli_cmd_wifi_slk_rekey, false},
-    {"slk_add", &cli_cmd_wifi_slk_add, false},
-    {"slk_remove", &cli_cmd_wifi_slk_remove, false},
-    {"slk_bitmap", &cli_cmd_wifi_slk_bitmap, false},
-    {"save", &cli_cmd_wifi_save, false},
-    {"rate-algo", &cli_cmd_wifi_wlan_rate_algo, false},
+    {"softap_rssi", &cli_cmd_wifi_softap_rssi, false},        
+    {"save", &cli_cmd_wifi_save, false},    
     {NULL, NULL, false}
 };
 
@@ -543,52 +453,6 @@ static const sl_cli_command_entry_t wifi_table[] = {
     {"wifi", &wifi_cli_cmds, false},
     {NULL, NULL, false}
 };
-
-/**************************************************************************//**
-* @brief: Construct the lwip statistic command
-******************************************************************************/
-static const sl_cli_command_info_t cli_cmd_lwip_ip_stats = \
-    SL_CLI_COMMAND(lwip_ip_stats,
-                   "Display the LwIP stack statistics",
-                   "lwip-stats",
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-/**************************************************************************//**
-* @brief: Create the lwip_table
-******************************************************************************/
-static const sl_cli_command_entry_t lwip_cli_cmds_table[] = {
-    {"stats", &cli_cmd_lwip_ip_stats, false},
-    {NULL, NULL, false}
-};
-
-static const sl_cli_command_info_t lwip_cli_cmds = \
-    SL_CLI_COMMAND_GROUP(lwip_cli_cmds_table, "lwip CLI commands");
-
-static const sl_cli_command_entry_t lwip_table[] = {
-    {"lwip", &lwip_cli_cmds, false},
-    {NULL, NULL, false}
-};
-
-/**************************************************************************//**
-* @brief: Construct iperf-related commands
-*****************************************************************************/
-static const sl_cli_command_info_t cli_cmd_iperf = \
-    SL_CLI_COMMAND(iperf,
-                   "Start a TCP iPerf test as a client or a server",
-                   "iperf <-c ip [-t dur] [-p port] [-k] | -s>",
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_iperf_server_stop = \
-    SL_CLI_COMMAND(iperf_server_stop,
-                   "Stop the running iPerf server",
-                   "iperf_stop_server",
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_iperf_client_stop = \
-    SL_CLI_COMMAND(iperf_client_stop,
-                   "Stop the running iPerf client",
-                   "iperf_stop_client",
-                   {SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
 
 /**************************************************************************//**
 * @brief: Construct the ping command
@@ -605,9 +469,6 @@ static const sl_cli_command_info_t cli_cmd_ping = \
 static const sl_cli_command_entry_t cmds_table[] = {
     {"reset", &cli_cmd_reset_cpu, false},
     {"ping", &cli_cmd_ping, false},
-    {"iperf", &cli_cmd_iperf, false},
-    {"iperf_server_stop", &cli_cmd_iperf_server_stop, false},
-    {"iperf_client_stop", &cli_cmd_iperf_client_stop, false},
     {NULL, NULL, false}
 };
 
@@ -627,15 +488,6 @@ static sl_cli_command_group_t cmds_group = {
   { NULL },
   false,
   cmds_table
-};
-
-/**************************************************************************//**
-* @brief: Create the lwip_group as the top level from the lwip_table
-*****************************************************************************/
-static sl_cli_command_group_t lwip_group = {
-  { NULL },
-  false,
-  lwip_table
 };
 
 /***************************************************************************//**
@@ -660,10 +512,6 @@ static bool register_cli_commands(void)
 
   /* Add the cmds_group */
   status |= sl_cli_command_add_command_group(sl_cli_inst_handle, &cmds_group);
-  EFM_ASSERT(status);
-
-  /* Add the lwip_group commands */
-  status |= sl_cli_command_add_command_group(sl_cli_inst_handle, &lwip_group);
   EFM_ASSERT(status);
 
   return status;

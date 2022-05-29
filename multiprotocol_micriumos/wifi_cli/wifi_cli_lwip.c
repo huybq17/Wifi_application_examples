@@ -43,13 +43,6 @@ static CPU_STK  wfx_cli_lwip_task_stk[WFX_CLI_LWIP_TASK_STK_SIZE];
 static OS_TCB   wfx_cli_lwip_task_tcb;
 
 /************************ Private variables ***********************************/
-static void *iperf_server_session = NULL;
-static void *iperf_client_session = NULL;
-static bool iperf_client_is_foreground_mode = false;
-
-static uint32_t last_client_bytes_transferred = 0;
-static uint32_t last_client_ms_duration = 0;
-static uint32_t last_client_bandwidth_kbitpsec = 0;
 
 static uint16_t ping_nb_packet_received = 0;
 static uint16_t ping_nb_packet_sent = 0;

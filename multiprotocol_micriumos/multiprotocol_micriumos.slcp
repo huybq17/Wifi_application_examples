@@ -12,8 +12,11 @@ component:
   - id: bluetooth_feature_advertiser
   - id: bluetooth_feature_connection
   - id: bluetooth_feature_gatt_server
+  - id: bluetooth_feature_gatt
   - id: bluetooth_feature_sm
   - id: bluetooth_feature_system
+  - id: bluetooth_feature_scanner
+  - id: component_catalog
   - id: ota_dfu
   - id: bootloader_interface
   - id: rail_util_pti
@@ -34,7 +37,7 @@ component:
   - id: board_control
   - id: device_init
   - id: device_init_clocks
-  - id: device_init_hfrco
+  
   - id: sl_system
   - id: sl_system_init
   - id: micriumos_bsp
@@ -112,6 +115,10 @@ other_file:
   - path: bluetooth/create_bl_files.sh  
 
 configuration:
+  - name: SL_STACK_SIZE
+    value: 2752
+  - name: SL_HEAP_SIZE
+    value: 9200
   - name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
     value: usartHwFlowControlNone
   - name: SL_IOSTREAM_USART_VCOM_CONVERT_BY_DEFAULT_LF_TO_CRLF
@@ -149,10 +156,13 @@ configuration:
 define:
   - name: DEBUG_EFM
 tag:
+  - hardware:rf:band:2400
   - hardware:component:led:2+
   - hardware:component:button:2+
 toolchain_settings:
   - option: optimize
     value: speed
- 
+ui_hints:
+  highlight:  
+  - {path: config/btconf/gatt_configuration.btconf, focus: true}
 

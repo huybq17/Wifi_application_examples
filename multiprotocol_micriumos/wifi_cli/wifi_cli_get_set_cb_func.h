@@ -31,7 +31,7 @@
 #include "lwip/netif.h"
 #include "wifi_cli_params.h"
 #include "app_wifi_events.h"
-#include "sl_wfx_secure_link.h"
+
 
 /* Global wifi context */
 extern sl_wfx_context_t   wifi;
@@ -68,7 +68,7 @@ void get_station_dhcp_client_state(sl_cli_command_arg_t *args);
 void get_station_netmask(sl_cli_command_arg_t *args);
 void get_station_gateway(sl_cli_command_arg_t *args);
 void get_station_ip(sl_cli_command_arg_t *args);
-void get_station_pmk(sl_cli_command_arg_t *args);
+
 void get_station_mac(sl_cli_command_arg_t *args);
 
 void get_softap_ssid(sl_cli_command_arg_t *args);
@@ -78,7 +78,7 @@ void get_softap_channel(sl_cli_command_arg_t *args);
 void get_softap_netmask(sl_cli_command_arg_t *args);
 void get_softap_gateway(sl_cli_command_arg_t *args);
 void get_softap_ip(sl_cli_command_arg_t *args);
-void get_softap_pmk(sl_cli_command_arg_t *args);
+
 void get_softap_mac(sl_cli_command_arg_t *args);
 void get_softap_dhcp_server_state(sl_cli_command_arg_t *args);
 void get_softap_client_list(sl_cli_command_arg_t *args);
@@ -104,7 +104,7 @@ void set_softap_gateway(sl_cli_command_arg_t *args);
 void set_softap_ip(sl_cli_command_arg_t *args);
 void set_softap_mac(sl_cli_command_arg_t *args);
 void set_softap_dhcp_server_state(sl_cli_command_arg_t *args);
-void set_mac_key(sl_cli_command_arg_t *args);
+
 
 /*******************************************************************************
  **************   WI-FI CLI's STATION COMMAND PROTOTYPES   *********************
@@ -115,8 +115,6 @@ void wifi_station_disconnect(sl_cli_command_arg_t *args);
 void wifi_station_scan(sl_cli_command_arg_t *args);
 void wifi_station_rssi(sl_cli_command_arg_t *args);
 
-void wifi_station_power_mode(sl_cli_command_arg_t *args);
-void wifi_station_power_save(sl_cli_command_arg_t *args);
 
 /*******************************************************************************
  **************   WI-FI CLI's SOFTAP COMMAND PROTOTYPES   ********************
@@ -126,40 +124,9 @@ void wifi_stop_softap(sl_cli_command_arg_t *args);
 void wifi_softap_rssi(sl_cli_command_arg_t *args);
 
 /**************************************************************************//**
- * @brief: Wi-Fi CLI's callback: Display the IP stack statistics.
- *****************************************************************************/
-void lwip_ip_stats(sl_cli_command_arg_t *args);
-
-/**************************************************************************//**
  * @brief: Wi-Fi CLI's callback: Send ICMP ECHO_REQUEST to network hosts.
  *****************************************************************************/
 void ping_cmd_cb(sl_cli_command_arg_t *args);
-
-/*******************************************************************************
- **************   WI-FI CLI's IPERF COMMANDS PROTOTYPES   **********************
- ******************************************************************************/
-void iperf(sl_cli_command_arg_t *args);
-void iperf_server_stop(sl_cli_command_arg_t *args);
-void iperf_client_stop(sl_cli_command_arg_t *args);
-
-/**************************************************************************//**
- * @brief: Wi-Fi CLI's callback: Send a command to the RF Test Agent.
- *****************************************************************************/
-void wifi_test_agent(sl_cli_command_arg_t *args);
-
-/*******************************************************************************
- *************   WI-FI CLI's SECURE-LINK COMMAND PROTOTYPES   ******************
- ******************************************************************************/
-void wifi_slk_rekey(sl_cli_command_arg_t *args);
-void wifi_slk_add(sl_cli_command_arg_t *args);
-void wifi_slk_remove(sl_cli_command_arg_t *args);
-void wifi_slk_bitmap(sl_cli_command_arg_t *args);
-
-
-/*******************************************************************************
- *************   WI-FI CLI's WLAN RATE ALGORITHM COMMANDS PROTOTYPES   ********
- ******************************************************************************/
-void wifi_wlan_rate_algo(sl_cli_command_arg_t *args);
 
 #ifdef __cplusplus
 }
