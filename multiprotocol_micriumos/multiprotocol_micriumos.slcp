@@ -1,11 +1,13 @@
 project_name: multiprotocol_micriumos
 label: multiprotocol_micriumos
 description: >
-  This example provides a MicriumOS-based example using multiple protocols (Wi-Fi + BLE) to do something as simple as toggling LEDs.
+  This example provides a MicriumOS-based application using multiple protocols (Wi-Fi + BLE) to do something as simple as toggling LEDs.
 
 category: Example|Platform
 package: platform
 quality: sample
+readme:
+- path: README.md
 component:
   - id: bluetooth_stack
   - id: gatt_configuration
@@ -37,7 +39,6 @@ component:
   - id: board_control
   - id: device_init
   - id: device_init_clocks
-  
   - id: sl_system
   - id: sl_system_init
   - id: micriumos_bsp
@@ -164,5 +165,6 @@ toolchain_settings:
     value: speed
 ui_hints:
   highlight:  
-  - {path: config/btconf/gatt_configuration.btconf, focus: true}
+  - {path: README.md, focus: true}
+  - {path: config/btconf/gatt_configuration.btconf}
 

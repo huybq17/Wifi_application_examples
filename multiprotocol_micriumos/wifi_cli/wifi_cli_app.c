@@ -43,7 +43,7 @@ static void wfx_cli_start_app_task(void *p_arg) {
             &err);
 
   /* Display Wi-Fi CLI application name */
-  printf("Wi-Fi CLI Application Example\r\n");
+  printf("Multi-protocol CLI Application Example\r\n");
 
   /* Start wifi events task handling indication message from wf200 */
   app_wifi_events_start();
