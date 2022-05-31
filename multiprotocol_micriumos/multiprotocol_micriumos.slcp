@@ -58,16 +58,16 @@ source:
   - path: main.c
   - path: app.c
   - path: app_wifi_events.c
-  - path: wifi_cli/wifi_cli_app.c
-    folder: wifi_cli
-  - path: wifi_cli/wifi_cli_cmd_registration.c
-    folder: wifi_cli
-  - path: wifi_cli/wifi_cli_get_set_cb_func.c
-    folder: wifi_cli
-  - path: wifi_cli/wifi_cli_lwip.c
-    folder: wifi_cli
-  - path: wifi_cli/wifi_cli_params.c
-    folder: wifi_cli
+  - path: wifi/wifi_cli_app.c
+    folder: wifi
+  - path: wifi/wifi_cli_cmd_registration.c
+    folder: wifi
+  - path: wifi/wifi_cli_get_set_cb_func.c
+    folder: wifi
+  - path: wifi/wifi_cli_lwip.c
+    folder: wifi
+  - path: wifi/wifi_cli_params.c
+    folder: wifi
   - path: lwip_host/ethernetif.c
     folder: lwip_host
   - path: lwip_host/apps/dhcp_client.c
@@ -79,18 +79,18 @@ include:
     file_list:
       - path: app.h
       - path: app_wifi_events.h
-  - path: wifi_cli
+  - path: wifi
     file_list:
       - path: wifi_cli_app.h
-        folder: wifi_cli
+        folder: wifi
       - path: wifi_cli_cmd_registration.h
-        folder: wifi_cli
+        folder: wifi
       - path: wifi_cli_get_set_cb_func.h
-        folder: wifi_cli
+        folder: wifi
       - path: wifi_cli_lwip.h
-        folder: wifi_cli
+        folder: wifi
       - path: wifi_cli_params.h
-        folder: wifi_cli
+        folder: wifi
   - path: lwip_host
     file_list:
       - path: ethernetif.h
