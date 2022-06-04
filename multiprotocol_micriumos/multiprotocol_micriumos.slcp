@@ -27,8 +27,6 @@ component:
   - id: mpu
   - id: simple_button
     instance: [btn0, btn1]
-  - id: cli
-    instance: [inst]
   - id: simple_led
     instance: [led0, led1]
   - id: iostream_recommended_stream
@@ -57,17 +55,14 @@ component:
 source:
   - path: main.c
   - path: app.c
-  - path: app_wifi_events.c
-  - path: wifi/wifi_cli_app.c
+  - path: bluetooth/app_bluetooth.c
+    folder: bluetooth
+  - path: wifi/app_wifi_events.c
     folder: wifi
-  - path: wifi/wifi_cli_cmd_registration.c
+  - path: wifi/app_webpage.c
     folder: wifi
-  - path: wifi/wifi_cli_get_set_cb_func.c
-    folder: wifi
-  - path: wifi/wifi_cli_lwip.c
-    folder: wifi
-  - path: wifi/wifi_cli_params.c
-    folder: wifi
+  - path: wifi/app_wifi_commissioning.c
+    folder: wifi  
   - path: lwip_host/ethernetif.c
     folder: lwip_host
   - path: lwip_host/apps/dhcp_client.c
@@ -77,19 +72,17 @@ source:
 include:
   - path: .
     file_list:
-      - path: app.h
-      - path: app_wifi_events.h
+      - path: app.h    
+  - path: bluetooth
+    file_list:
+      - path: app_bluetooth.h  
   - path: wifi
     file_list:
-      - path: wifi_cli_app.h
+      - path: app_wifi_events.h
         folder: wifi
-      - path: wifi_cli_cmd_registration.h
+      - path: app_webpage.h
         folder: wifi
-      - path: wifi_cli_get_set_cb_func.h
-        folder: wifi
-      - path: wifi_cli_lwip.h
-        folder: wifi
-      - path: wifi_cli_params.h
+      - path: app_wifi_commissioning.h
         folder: wifi
   - path: lwip_host
     file_list:
@@ -103,6 +96,10 @@ include:
         folder: lwip_host/apps
       - path: dhcp_server.h
         folder: lwip_host/apps
+  - path: lwip_host/webpage
+    file_list:
+      - path: httpfsdata.h
+        folder: lwip_host/webpage
 
 config_file:
   - override:

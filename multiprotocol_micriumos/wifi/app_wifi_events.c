@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
- * @brief Wi-Fi messages processing task
+ * @brief Wi-Fi messages processing
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,8 @@
 #include <common/include/rtos_err.h>
 #include "sl_wfx_host.h"
 #include "dhcp_server.h"
-#include "wifi_cli_lwip.h"
+#include "app_webpage.h"
 #include "app_wifi_events.h"
-#include "wifi_cli_params.h"
 
 // Event Task Configurations
 #define WFX_EVENTS_TASK_PRIO              21u
@@ -60,6 +59,7 @@ static uint8_t scan_count = 0;
 bool           scan_verbose   = true;
 static CPU_STK wfx_events_task_stk[WFX_EVENTS_TASK_STK_SIZE];
 static OS_TCB wfx_events_task_tcb;
+extern OS_SEM scan_sem;
 
 /**************************************************************************//**
  * Function processing the incoming Wi-Fi messages
@@ -176,9 +176,10 @@ void sl_wfx_scan_result_callback(sl_wfx_scan_result_ind_t *scan_result)
   if (scan_verbose) {
     /*Report one AP information*/
     printf(
-      "# %2d %2d  %03d %02X:%02X:%02X:%02X:%02X:%02X  %s\r\n",
+      "# %2d %2d %02X %03d %02X:%02X:%02X:%02X:%02X:%02X  %s\r\n",
       scan_count,
       scan_result->body.channel,
+      *(uint8_t *)&scan_result->body.security_mode,
       ((int16_t)(scan_result->body.rcpi - 220) / 2),
       scan_result->body.mac[0], scan_result->body.mac[1],
       scan_result->body.mac[2], scan_result->body.mac[3],
@@ -295,24 +296,7 @@ void sl_wfx_disconnect_callback(sl_wfx_disconnect_ind_t *disconnect)
   sl_status_t status;
   RTOS_ERR err;
 
-  switch (disconnect->body.reason) {
-    case WFM_DISCONNECTED_REASON_UNSPECIFIED:
-      printf("The device disconnected because of an internal error\r\n");
-      break;
-    case WFM_DISCONNECTED_REASON_AP_LOST:
-      printf("The device lost the AP beacons for too long\r\n");
-      break;
-    case WFM_DISCONNECTED_REASON_REJECTED:
-      printf("The device was disconnected by the AP\r\n");
-      break;
-    case  WFM_DISCONNECTED_REASON_LEAVING_BSS:
-      printf("Disconnection was requested through the device API\r\n");
-      break;
-    case WFM_DISCONNECTED_REASON_WPA_COUNTERMEASURES:
-      printf("WPA countermeasures triggered a disconnection\r\n");
-      break;
-  }
-
+  printf("Disconnected %d\r\n", disconnect->body.reason);
   sl_wfx_context->state &= ~SL_WFX_STA_INTERFACE_CONNECTED;
 
   status = sl_wfx_host_allocate_buffer(&buffer,
@@ -392,6 +376,8 @@ void sl_wfx_ap_client_connected_callback(sl_wfx_ap_client_connected_ind_t *ap_cl
          ap_client_connected->body.mac[3],
          ap_client_connected->body.mac[4],
          ap_client_connected->body.mac[5]);
+  printf("Open a web browser and go to http://%d.%d.%d.%d\r\n",
+         ap_ip_addr0, ap_ip_addr1, ap_ip_addr2, ap_ip_addr3);
 }
 
 /**************************************************************************//**
@@ -435,7 +421,8 @@ void sl_wfx_ap_client_disconnected_callback(sl_wfx_ap_client_disconnected_ind_t 
  *****************************************************************************/
 void sl_wfx_generic_status_callback(sl_wfx_generic_ind_t* frame)
 {
-  rx_stats = frame->body.indication_data.rx_stats;
+  (void)(frame);
+  printf("Generic status received\r\n");
 }
 
 /***************************************************************************//**
@@ -443,7 +430,6 @@ void sl_wfx_generic_status_callback(sl_wfx_generic_ind_t* frame)
  ******************************************************************************/
 static void wfx_events_task(void *p_arg)
 {
-  int ret;
   RTOS_ERR err;
   OS_MSG_SIZE msg_size;
   sl_wfx_generic_message_t *msg;
@@ -459,20 +445,17 @@ static void wfx_events_task(void *p_arg)
                                               &err);
 
     if (msg != NULL) {
-      ret = 0;
       switch (msg->header.id) {
         case SL_WFX_CONNECT_IND_ID:
         {
           set_sta_link_up();
-          ret = wifi_cli_resume(&g_cli_sem, SL_WFX_CONNECT_IND_ID);
 
 #ifdef SL_CATALOG_POWER_MANAGER_PRESENT
           if (!(wifi.state & SL_WFX_AP_INTERFACE_UP)) {
             // Enable the WFX power save mode
             // Note: this mode is independent from the host power saving
             //       but has been linked to simplicfy the example.
-            //sl_wfx_set_power_mode(WFM_PM_MODE_PS, 1);
-            sl_wfx_set_power_mode(WFM_PM_MODE_PS, WFM_PM_POLL_UAPSD, 1);
+            sl_wfx_set_power_mode(WFM_PM_MODE_PS, WFM_PM_POLL_FAST_PS, 1);
             sl_wfx_enable_device_power_save();
           }
 #endif
@@ -481,17 +464,14 @@ static void wfx_events_task(void *p_arg)
         case SL_WFX_DISCONNECT_IND_ID:
         {
           set_sta_link_down();
-          ret = wifi_cli_resume(&g_cli_sem, SL_WFX_DISCONNECT_IND_ID);
           break;
         }
         case SL_WFX_START_AP_IND_ID:
         {
           set_ap_link_up();
-          ret = wifi_cli_resume(&g_cli_sem, SL_WFX_START_AP_IND_ID);
 
 #ifdef SL_CATALOG_POWER_MANAGER_PRESENT
           // Power save always disabled when SoftAP mode enabled
-          //sl_wfx_set_power_mode(WFM_PM_MODE_ACTIVE, 0);
           sl_wfx_set_power_mode(WFM_PM_MODE_ACTIVE, WFM_PM_POLL_FAST_PS, 0);
           sl_wfx_disable_device_power_save();
 #endif
@@ -500,15 +480,13 @@ static void wfx_events_task(void *p_arg)
         case SL_WFX_STOP_AP_IND_ID:
         {
           set_ap_link_down();
-          ret = wifi_cli_resume(&g_cli_sem, SL_WFX_STOP_AP_IND_ID);
 
 #ifdef SL_CATALOG_POWER_MANAGER_PRESENT
           if (wifi.state & SL_WFX_STA_INTERFACE_CONNECTED) {
             // Enable the WFX power save mode
             // Note: this mode is independent from the host power saving
             //       but has been linked to simplicfy the example.
-            //sl_wfx_set_power_mode(WFM_PM_MODE_PS, 1);
-            sl_wfx_set_power_mode(WFM_PM_MODE_PS, WFM_PM_POLL_UAPSD, 1);
+            sl_wfx_set_power_mode(WFM_PM_MODE_PS, WFM_PM_POLL_FAST_PS, 1);
             sl_wfx_enable_device_power_save();
           }
 #endif
@@ -516,13 +494,9 @@ static void wfx_events_task(void *p_arg)
         }
         case SL_WFX_SCAN_COMPLETE_IND_ID:
         {
-          ret = wifi_cli_resume(&g_cli_sem, SL_WFX_SCAN_COMPLETE_IND_ID);
+          OSSemPost(&scan_sem, OS_OPT_POST_ALL, &err);
           break;
         }
-      }
-      /* Check the wifi_cli_resume() result */
-      if (ret < 0) {
-          LOG_DEBUG("wfx_events_task() failed to release CLI's semaphore");
       }
 
       sl_wfx_host_free_buffer(msg, SL_WFX_RX_FRAME_BUFFER);
@@ -546,19 +520,10 @@ void app_wifi_events_start(void)
 #endif
 #endif
 
-  /* Initialize Wi-Fi CLI's binary semaphore */
-  wifi_cli_sem_init(&g_cli_sem, &err);
-
-  /* Check error code. */
-  APP_RTOS_ASSERT_DBG((RTOS_ERR_CODE_GET(err) == RTOS_ERR_NONE), 1);
-
-  /* Create wifi_events message queue */
   OSQCreate(&wifi_events, "wifi events", WFX_EVENTS_NB_MAX, &err);
-
-  /* Check error code. */
+  // Check error code.
   APP_RTOS_ASSERT_DBG((RTOS_ERR_CODE_GET(err) == RTOS_ERR_NONE), 1);
 
-  /* Create Wi-Fi events task */
   OSTaskCreate(&wfx_events_task_tcb,
                "WFX events task",
                wfx_events_task,
@@ -572,7 +537,6 @@ void app_wifi_events_start(void)
                DEF_NULL,
                (OS_OPT_TASK_STK_CLR),
                &err);
-
-  /* Check error code. */
+  // Check error code.
   APP_RTOS_ASSERT_DBG((RTOS_ERR_CODE_GET(err) == RTOS_ERR_NONE), 1);
 }

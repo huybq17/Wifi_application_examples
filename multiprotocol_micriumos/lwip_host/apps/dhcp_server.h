@@ -1,7 +1,5 @@
 /**************************************************************************//**
- * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
- *******************************************************************************
+ * Copyright 2019, Silicon Laboratories Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,13 +59,6 @@ ip_addr_t dhcpserver_get_ip(struct eth_addr *mac);
  * Clear stored mac addresses in client list.
  ******************************************************************************/
 void dhcpserver_clear_stored_mac(void);
-
-/***************************************************************************//**
- * Return the DHCP server state.
- ******************************************************************************/
-bool dhcpserver_is_started(void);
-
-
 #ifdef __cplusplus
 }
 #endif

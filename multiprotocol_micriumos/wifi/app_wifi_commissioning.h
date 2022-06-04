@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file
- * @brief Application interface provided to main().
+ * @brief Wi-Fi Commissioning application interface.
  *******************************************************************************
  * # License
  * <b>Copyright 2020 Silicon Laboratories Inc. www.silabs.com</b>
@@ -14,13 +14,12 @@
  * sections of the MSLA applicable to Source Code.
  *
  ******************************************************************************/
-
-#ifndef APP_H
-#define APP_H
+#ifndef APP_WIFI_COMMISSIONING_H
+#define APP_WIFI_COMMISSIONING_H
 
 /**************************************************************************//**
- * Application Init.
+ * Wi-Fi Commissioining application init.
  *****************************************************************************/
-void app_init(void);
+void app_wifi_commissioning_init(void);
 
-#endif // APP_H
+#endif // APP_WIFI_COMMISSIONING_H

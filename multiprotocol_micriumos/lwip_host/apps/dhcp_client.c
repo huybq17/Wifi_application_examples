@@ -3,7 +3,7 @@
  * @brief LwIP DHCP client implementation
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *****************************************************************************/
+#include "lwip/dhcp.h"
 #include "lwip/netifapi.h"
-#include "wifi_cli_params.h"
+#include "app_webpage.h"
 #include <kernel/include/os.h>
 #include <common/include/rtos_utils.h>
 #include <common/include/rtos_err.h>

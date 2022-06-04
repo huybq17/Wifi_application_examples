@@ -3,7 +3,7 @@
  * @brief LwIP configuration header file.
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -87,10 +87,7 @@
 #define UDP_TTL                 255
 
 /* Statistics options */
-#define LWIP_STATS              1
-#define LWIP_STATS_DISPLAY      1
-
-#define LWIP_RAW                1
+#define LWIP_STATS 0
 
 /* Support a callback function from an interface
  * whenever the link changes (i.e., link down)
@@ -127,9 +124,7 @@
 /** Set this to 1 to include "fsdata_custom.c" instead of "fsdata.c" for the
  * file system (to prevent changing the file included in LwIP) */
 #define HTTPD_USE_CUSTOM_FSDATA   0
-#ifdef APP_WEBPAGE_H
 #define HTTPD_FSDATA_FILE      "httpfsdata.h"
-#endif
 #define LWIP_HTTPD_CGI 1
 #define LWIP_HTTPD_SSI 1
 #define LWIP_HTTPD_SSI_INCLUDE_TAG 0

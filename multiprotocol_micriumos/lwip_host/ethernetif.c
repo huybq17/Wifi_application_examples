@@ -3,7 +3,7 @@
  * @brief Ethernet interface implementation for LwIP and WFX
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@
 #include "sl_wfx_host_api.h"
 #include "sl_wfx_task.h"
 #include "sl_wfx.h"
-#include "wifi_cli_params.h"
+#include "app_webpage.h"
 #include "app_wifi_events.h"
 
 #include <kernel/include/os.h>
@@ -98,7 +98,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
 
   if ((result != SL_STATUS_OK) || (queue_item == NULL)) {
     /* Release TX queue mutex */
-	  OSMutexPost(&sl_wfx_tx_queue_mutex, OS_OPT_POST_NONE, &err);
+    OSMutexPost(&sl_wfx_tx_queue_mutex, OS_OPT_POST_NONE, &err);
     return ERR_MEM;
   }
 
@@ -143,7 +143,6 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
  ******************************************************************************/
 static struct pbuf * low_level_input(struct netif *netif, sl_wfx_received_ind_t* rx_buffer)
 {
-  (void)netif;
   struct pbuf *p = NULL;
   struct pbuf *q = NULL;
   uint16_t len = 0;

@@ -3,7 +3,7 @@
  * @brief LwIP DHCP server implementation
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,18 +19,17 @@
  * limitations under the License.
  *****************************************************************************/
 #include <string.h>
-#include "lwip/netifapi.h"
+#include "lwip/dhcp.h"
 #include "lwip/tcpip.h"
 #include "lwip/prot/dhcp.h"
 #include "lwip/etharp.h"
-#include "wifi_cli_params.h"
+#include "app_webpage.h"
 #include "dhcp_server.h"
 
 #if LWIP_UDP && LWIP_DHCP
 
 /// LwIP pcb for dhcp server.
 static struct udp_pcb * dhcp_pcb = 0;
-static bool dhcp_server_started = false;
 
 #define DHCP_RESPONSE_DEFAULT_SIZE 1024
 #define DHCPS_DBG 0
@@ -44,18 +43,18 @@ static struct eth_addr saved_mac[DHCPS_MAX_CLIENT];
 #define UDP_DATA_OFS    0
 // DHCP message item offsets and length
 #define DHCP_MSG_OFS (UDP_DATA_OFS)
-#define DHCP_OP_OFS (DHCP_MSG_OFS + 0)
-#define DHCP_HTYPE_OFS (DHCP_MSG_OFS + 1)
-#define DHCP_HLEN_OFS (DHCP_MSG_OFS + 2)
-#define DHCP_HOPS_OFS (DHCP_MSG_OFS + 3)
-#define DHCP_XID_OFS (DHCP_MSG_OFS + 4)
-#define DHCP_SECS_OFS (DHCP_MSG_OFS + 8)
-#define DHCP_FLAGS_OFS (DHCP_MSG_OFS + 10)
-#define DHCP_CIADDR_OFS (DHCP_MSG_OFS + 12)
-#define DHCP_YIADDR_OFS (DHCP_MSG_OFS + 16)
-#define DHCP_SIADDR_OFS (DHCP_MSG_OFS + 20)
-#define DHCP_GIADDR_OFS (DHCP_MSG_OFS + 24)
-#define DHCP_CHADDR_OFS (DHCP_MSG_OFS + 28)
+  #define DHCP_OP_OFS (DHCP_MSG_OFS + 0)
+  #define DHCP_HTYPE_OFS (DHCP_MSG_OFS + 1)
+  #define DHCP_HLEN_OFS (DHCP_MSG_OFS + 2)
+  #define DHCP_HOPS_OFS (DHCP_MSG_OFS + 3)
+  #define DHCP_XID_OFS (DHCP_MSG_OFS + 4)
+  #define DHCP_SECS_OFS (DHCP_MSG_OFS + 8)
+  #define DHCP_FLAGS_OFS (DHCP_MSG_OFS + 10)
+  #define DHCP_CIADDR_OFS (DHCP_MSG_OFS + 12)
+  #define DHCP_YIADDR_OFS (DHCP_MSG_OFS + 16)
+  #define DHCP_SIADDR_OFS (DHCP_MSG_OFS + 20)
+  #define DHCP_GIADDR_OFS (DHCP_MSG_OFS + 24)
+  #define DHCP_CHADDR_OFS (DHCP_MSG_OFS + 28)
 
 #define DHCP_COOKIE_OFS (DHCP_MSG_OFS + DHCP_MSG_LEN)
 #define UDP_DHCP_OPTIONS_OFS (DHCP_MSG_OFS + DHCP_MSG_LEN + 4)
@@ -507,11 +506,7 @@ static void dhcpserver_start_prv(void * arg)
  ******************************************************************************/
 void dhcpserver_start(void)
 {
-  err_t err;
-  err = tcpip_callback(dhcpserver_start_prv, 0);
-  if (err == ERR_OK) {
-    dhcp_server_started = true;
-  }
+  tcpip_callback(dhcpserver_start_prv, 0);
 }
 
 /***************************************************************************//**
@@ -533,20 +528,6 @@ static void dhcpserver_stop_prv(void * arg)
  ******************************************************************************/
 void dhcpserver_stop(void)
 {
-  err_t err;
-  err = tcpip_callback(dhcpserver_stop_prv, 0);
-  if (err == ERR_OK) {
-    dhcp_server_started = false;
-  }
-
+  tcpip_callback(dhcpserver_stop_prv, 0);
 }
-
-/***************************************************************************//**
- * Return the DHCP server state.
- ******************************************************************************/
-bool dhcpserver_is_started(void)
-{
-  return dhcp_server_started;
-}
-
 #endif
