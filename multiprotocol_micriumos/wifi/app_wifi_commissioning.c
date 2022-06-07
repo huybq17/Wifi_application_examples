@@ -57,7 +57,7 @@ static void start_app_task(void *p_arg)
 
   OSSemPend(&wfx_init_sem, 0, OS_OPT_PEND_BLOCKING, 0, &err);
   // Clear the console and buffer
-  printf("Wi-Fi Commissioning Micrium  OS Example\r\n");
+  printf("Multiprotocol Micrium  OS Example\r\n");
 
   app_wifi_events_start();
   webpage_start();
