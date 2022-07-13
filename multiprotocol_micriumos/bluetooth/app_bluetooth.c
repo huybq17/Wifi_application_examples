@@ -27,6 +27,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  ******************************************************************************/
+#include <stdbool.h>
 #include "em_common.h"
 #include "app_assert.h"
 #include "sl_bluetooth.h"
@@ -34,6 +35,10 @@
 #include "app.h"
 
 #include "app_bluetooth.h"
+char boot_message[MAX_BUF_LEN];
+
+// The advertising set handle allocated from Bluetooth stack.
+static uint8_t advertising_set_handle = 0xff;
 
 static sl_bt_gatt_client_config_flag_t light_state_gatt_flag = sl_bt_gatt_disable;
 static sl_bt_gatt_client_config_flag_t trigger_source_gatt_flag = sl_bt_gatt_disable;
@@ -47,12 +52,36 @@ static uint8_t ble_state = 0;
 
 static BleConn_t ble_conn[SL_BT_CONFIG_MAX_CONNECTIONS];
 static bd_addr ble_own_addr = {0};
+static char ble_own_name[DEVNAME_LEN] = {0};
 
 // Timers for periodic & timeout indication
 static sl_simple_timer_t app_bt_timers[2]; // periodic & timeout timer handles
 static BleTimer_t g_timer_types[2] = {bleTimerIndicatePeriod, bleTimerIndicateTimeout};
 static void app_single_timer_cb(sl_simple_timer_t *handle, void *data);
 
+/* Print stack version and local Bluetooth address as boot message */
+static void get_ble_boot_msg(sl_bt_msg_t *bootevt, bd_addr *local_addr)
+{
+
+
+  snprintf(boot_message, MAX_BUF_LEN, "BLE stack version: %u.%u.%u\r\n"
+         "Local BT device address: %02X:%02X:%02X:%02X:%02X:%02X",
+         bootevt->data.evt_system_boot.major,
+         bootevt->data.evt_system_boot.minor,
+         bootevt->data.evt_system_boot.patch,
+         local_addr->addr[5],
+         local_addr->addr[4],
+         local_addr->addr[3],
+         local_addr->addr[2],
+         local_addr->addr[1],
+         local_addr->addr[0]);
+
+//  printf("local BT device address: ");
+//  for (i = 0; i < 5; i++) {
+//    printf("%02X:", local_addr->addr[5 - i]);
+//  }
+//  printf("%02X\r\n", local_addr->addr[0]);
+}
 
 // return false on error
 static bool bleConnAdd(uint8_t handle, bd_addr* address)
@@ -187,6 +216,35 @@ static int bluetooth_app_send_indication(uint16_t ble_characteristic)
   return res;
 }
 
+void bluetooth_app_start_advertising(void)
+{
+  sl_status_t sc;
+  bool is_connectable = ble_nb_connected < SL_BT_CONFIG_MAX_CONNECTIONS;
+
+  // Start general advertising and enable connections.
+  sc = sl_bt_advertiser_start(advertising_set_handle,
+                              sl_bt_advertiser_general_discoverable,
+                              is_connectable ?
+                              sl_bt_advertiser_connectable_scannable :
+                              sl_bt_advertiser_scannable_non_connectable);
+  app_assert_status(sc);
+
+  if (sc == SL_STATUS_OK) {
+    ble_state |= BLE_STATE_ADVERTISING;
+  }
+}
+
+void bluetooth_app_stop_advertising (void)
+{
+  sl_status_t sc;
+
+  sc = sl_bt_advertiser_stop(advertising_set_handle);
+  app_assert_status(sc);
+  if (sc == SL_STATUS_OK) {
+    ble_state &= ~BLE_STATE_ADVERTISING;
+  }
+}
+
 /**************************************************************************//**
  * Acquire Light mutex
  * @param[in] handle timer handle
@@ -225,10 +283,6 @@ static void app_single_timer_cb(sl_simple_timer_t *handle,
       break;
    }
 }
-
-// The advertising set handle allocated from Bluetooth stack.
-static uint8_t advertising_set_handle = 0xff;
-
 
 /**************************************************************************//**
  * Application Init.
@@ -302,8 +356,14 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       app_assert_status(sc);
 
       memcpy((void *)&ble_own_addr, (void *)&address, sizeof(ble_own_addr));
+
+      // Boot_messages
+      get_ble_boot_msg(evt, &address);
+
       // Update the LCD display with the BLE Id
       interface_display_ble_id((uint8_t *)&ble_own_addr.addr);
+      snprintf(ble_own_name, DEVNAME_LEN, "MP%02X%02X",
+               ble_own_addr.addr[1], ble_own_addr.addr[0]);
 
       // Create an advertising set.
       sc = sl_bt_advertiser_create_set(&advertising_set_handle);
@@ -311,18 +371,14 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 
       // Set advertising interval to 100ms.
       sc = sl_bt_advertiser_set_timing(
-        advertising_set_handle,
-        160, // min. adv. interval (milliseconds * 1.6)
-        160, // max. adv. interval (milliseconds * 1.6)
-        0,   // adv. duration
-        0);  // max. num. adv. events
+                              advertising_set_handle,
+                              160, // min. adv. interval (milliseconds * 1.6)
+                              160, // max. adv. interval (milliseconds * 1.6)
+                              0,   // adv. duration
+                              0);  // max. num. adv. events
       app_assert_status(sc);
       // Start general advertising and enable connections.
-      sc = sl_bt_advertiser_start(
-        advertising_set_handle,
-        sl_bt_advertiser_general_discoverable,
-        sl_bt_advertiser_connectable_scannable);
-      app_assert_status(sc);
+      bluetooth_app_start_advertising();
       break;
 
     // -------------------------------
@@ -342,6 +398,10 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
              evt->data.evt_connection_opened.address.addr[2],
              evt->data.evt_connection_opened.address.addr[1],
              evt->data.evt_connection_opened.address.addr[0]);
+
+      // Restart the advertising with scan response (scannable ability only) 
+      // which is automatically stopped after a connection (not the beacons)
+      bluetooth_app_start_advertising();
 
       if (ble_nb_connected == 1) {
           interface_display_ble_state(true);
@@ -370,12 +430,10 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
         ble_indication_ongoing = false;
         ble_indication_pending = false;
       }
-      // Restart advertising after client has disconnected.
-      sc = sl_bt_advertiser_start(
-        advertising_set_handle,
-        sl_bt_advertiser_general_discoverable,
-        sl_bt_advertiser_connectable_scannable);
-      app_assert_status(sc);
+
+      // Restart after client has disconnected & 
+      // advertising with connectable ability
+      bluetooth_app_start_advertising();
       break;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -540,4 +598,56 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     default:
       break;
   }
+}
+
+uint8_t bluetooth_app_get_ble_state (void)
+{
+  return ble_state;
+}
+
+void bluetooth_app_get_own_mac (bd_addr *mac)
+{
+  if (mac != NULL) {
+    memcpy(mac, &ble_own_addr, sizeof(bd_addr));
+  }
+}
+
+int bluetooth_app_get_master_mac (bd_addr *mac)
+{
+  BleConn_t *conn;
+  int ret = -1;
+
+  if (mac != NULL) {
+    conn = bleConnGet(BLE_MASTER_CONNECTION);
+    if (conn != NULL) {
+      memcpy(mac, &conn->address, sizeof(bd_addr));
+      ret = 0;
+    }
+  }
+
+  return ret;
+}
+
+void bluetooth_app_get_own_name (char *name, int name_size)
+{
+  if (name != NULL) {
+    strncpy(name, ble_own_name, name_size);
+  }
+}
+
+int bluetooth_app_get_master_name (char *name, int name_size)
+{
+  BleConn_t *conn;
+  int ret = -1;
+
+  if (name != NULL) {
+    conn = bleConnGet(BLE_MASTER_CONNECTION);
+    if (conn != NULL) {
+      strncpy(name, conn->name, name_size);
+      name[name_size-1] = '\0';
+      ret = 0;
+    }
+  }
+
+  return ret;
 }

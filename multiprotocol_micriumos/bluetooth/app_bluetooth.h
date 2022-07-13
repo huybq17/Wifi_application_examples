@@ -15,8 +15,15 @@
 #define INDICATION_TIMER_TIMEOUT_MSEC             1000
 
 #define BLE_MASTER_NAME_MAX_LEN                   15
+#define BLE_MASTER_CONNECTION                     1
+#define BLE_STATE_ADVERTISING                     (1<<0) 
+#define BLE_STATE_CONNECTED                       (1<<1)
+#define MAX_BUF_LEN                               128 
 
-#define BLE_STATE_CONNECTED       (1<<1)
+/**< Device name length (incl term null). */
+#define DEVNAME_LEN                                8        
+extern char boot_message[MAX_BUF_LEN];
+
 /**************************************************************************//**
  * User-defined types & functions.
  *****************************************************************************/
@@ -34,5 +41,9 @@ typedef struct {
 } BleConn_t;
 
 void bluetooth_app_request_send_indication(void);
-
+uint8_t bluetooth_app_get_ble_state (void);
+void bluetooth_app_get_own_mac(bd_addr *mac);
+int  bluetooth_app_get_master_mac(bd_addr *mac);
+void bluetooth_app_get_own_name(char *name, int name_size);
+int  bluetooth_app_get_master_name(char *name, int name_size);
 #endif // APP_BLUETOOTH_H
