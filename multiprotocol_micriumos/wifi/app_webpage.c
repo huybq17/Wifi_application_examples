@@ -296,7 +296,7 @@ static const char* disconnect_ble_master_cgi_handler(int index,
     char* pc_value[])
 {
     printf("Disconnect BLE\r\n");
-    //bluetooth_app_disconnect_master();
+    bluetooth_app_disconnect_master();
     return "/empty.json";
 }
 

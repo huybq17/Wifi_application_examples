@@ -54,6 +54,10 @@ static BleConn_t ble_conn[SL_BT_CONFIG_MAX_CONNECTIONS];
 static bd_addr ble_own_addr = {0};
 static char ble_own_name[DEVNAME_LEN] = {0};
 
+static uint32_t gatt_service_handle = 0;
+static uint16_t gatt_name_characteristic_handle = 0;
+static ble_name_retrieval_step_t name_retrieval_step = get_gatt_service_handle;
+
 // Timers for periodic & timeout indication
 static sl_simple_timer_t app_bt_timers[2]; // periodic & timeout timer handles
 static BleTimer_t g_timer_types[2] = {bleTimerIndicatePeriod, bleTimerIndicateTimeout};
@@ -369,6 +373,13 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       sc = sl_bt_advertiser_create_set(&advertising_set_handle);
       app_assert_status(sc);
 
+      // Change the default device name (MP Demo)
+      sc = sl_bt_gatt_server_write_attribute_value(DEV_NAME_GATDB,
+                                              0,
+                                              strlen(ble_own_name),
+                                              (const uint8_t *)ble_own_name);
+      app_assert_status(sc);
+
       // Set advertising interval to 100ms.
       sc = sl_bt_advertiser_set_timing(
                               advertising_set_handle,
@@ -390,7 +401,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       bleConnAdd(evt->data.evt_connection_opened.connection,
                  &evt->data.evt_connection_opened.address);
 
-      printf("BLE: connection opened %d (%02X%02X%02X%02X%02X%02X)\r\n",
+      printf("BLE: connection opened %d (MAC address %02X:%02X:%02X:%02X:%02X:%02X)\r\n",
              evt->data.evt_connection_opened.connection,
              evt->data.evt_connection_opened.address.addr[5],
              evt->data.evt_connection_opened.address.addr[4],
@@ -405,11 +416,18 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 
       if (ble_nb_connected == 1) {
           interface_display_ble_state(true);
+
+          // Start timer for indication
           sl_simple_timer_start(&app_bt_timers[bleTimerIndicatePeriod],
                                 INDICATION_TIMER_PERIOD_MSEC,
                                 app_single_timer_cb,
                                 &g_timer_types[bleTimerIndicatePeriod],
                                 true);
+          // Start the procedure to retrieve the remote device name
+          uint16_t ga_service = BLE_GATT_SERVICE_GENERIC_ACCESS_UUID;
+          sl_bt_gatt_discover_primary_services_by_uuid(BLE_MASTER_CONNECTION,
+                                                         2,
+                                                         (uint8_t *)&ga_service);
       }
       break;
 
@@ -466,8 +484,8 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     }
       
     /* This event indicates that a remote GATT client is attempting to read a value of an
-      *  attribute from the local GATT database, where the attribute was defined in the GATT
-      *  XML firmware configuration file to have type="user". */
+     *  attribute from the local GATT database, where the attribute was defined in the GATT
+     *  XML firmware configuration file to have type="user". */
     case sl_bt_evt_gatt_server_user_read_request_id:
     {   
     
@@ -593,7 +611,91 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
         }
       }
       break;
-    }    
+    }
+
+    case sl_bt_evt_advertiser_scan_request_id:
+      break;
+
+    case sl_bt_evt_scanner_scan_report_id:
+      break;
+
+    case sl_bt_evt_gatt_service_id:
+    {
+      // Store the service handle
+      gatt_service_handle = evt->data.evt_gatt_service.service;
+      break;
+    }
+
+    case sl_bt_evt_gatt_characteristic_id:
+    {
+      // Store the handle of the Name Characteristic
+      gatt_name_characteristic_handle = evt->data.evt_gatt_characteristic.characteristic;
+      break;
+    }
+
+    case sl_bt_evt_gatt_characteristic_value_id:
+    {
+      // Name retrieved, update the connection information
+      BleConn_t *conn = bleConnGet(BLE_MASTER_CONNECTION);
+      if (conn != NULL) {
+        uint8_t min_len = evt->data.evt_gatt_characteristic_value.value.len < BLE_MASTER_NAME_MAX_LEN ?
+                          evt->data.evt_gatt_characteristic_value.value.len : BLE_MASTER_NAME_MAX_LEN;
+        memcpy(conn->name,
+               evt->data.evt_gatt_characteristic_value.value.data,
+               min_len);
+        conn->name[min_len] = '\0';
+      }
+      break;
+    }
+    case sl_bt_evt_gatt_procedure_completed_id:
+    {
+      if (evt->data.evt_gatt_procedure_completed.result == 0) {
+
+        switch (name_retrieval_step) {
+          case get_gatt_service_handle:
+          {
+            sl_status_t resp;
+
+            // Discover the Name Characteristic of the service
+            uint16_t uuid = BLE_GATT_CHARACTERISTIC_DEVICE_NAME_UUID;
+            resp = sl_bt_gatt_discover_characteristics_by_uuid(BLE_MASTER_CONNECTION,
+                                                             gatt_service_handle,
+                                                             2,
+                                                             (uint8_t*)&uuid);
+
+            if (resp == SL_STATUS_OK) {
+              // Operation success, go to the next step
+              name_retrieval_step = get_gatt_name_characteristic_handle;
+            }
+            break;
+          }
+
+          case get_gatt_name_characteristic_handle:
+          {
+            sl_status_t resp;
+
+            // Request the value of the Name characteristic
+            resp = sl_bt_gatt_read_characteristic_value(BLE_MASTER_CONNECTION,
+                                                gatt_name_characteristic_handle);
+
+            if (resp == SL_STATUS_OK) {
+              // Operation success, go to the next step
+              name_retrieval_step = get_gatt_name_characteristic_value;
+            }
+            break;
+          }
+
+          case get_gatt_name_characteristic_value:
+            // Nothing to do here, the value has already been stored
+            name_retrieval_step = get_gatt_service_handle;
+            break;
+        }
+      }
+
+      break;
+    }
+
+
     // Default event handler.
     default:
       break;
@@ -650,4 +752,13 @@ int bluetooth_app_get_master_name (char *name, int name_size)
   }
 
   return ret;
+}
+
+void bluetooth_app_disconnect_master(void) {
+  BleConn_t *conn;
+  conn = bleConnGet(BLE_MASTER_CONNECTION);
+
+  if (conn->inUse) {
+      sl_bt_connection_close(conn->handle);
+  }
 }

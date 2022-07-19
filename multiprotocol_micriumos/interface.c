@@ -165,7 +165,7 @@ static void apply_light_change (interface_light_trigger_src_t trigger,
   // Store data
   led_state = new_state;
   led_trigger_source = trigger;
-  printf("MAC address of triggered source (%02X%02X%02X%02X%02X%02X)\r\n",
+  printf("MAC address of triggered source (%02X:%02X:%02X:%02X:%02X:%02X)\r\n",
          mac->addr[5],
          mac->addr[4],
          mac->addr[3],
