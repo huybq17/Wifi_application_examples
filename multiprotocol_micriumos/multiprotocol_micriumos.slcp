@@ -40,8 +40,7 @@ component:
   - id: micriumos_bsp
   - id: micriumos_kernel
   - id: micriumos_common_lib
-  - id: micriumos_io_core
-  - id: wfx_bus_spi
+  - id: micriumos_io_core  
   - id: wfx_fmac_driver
   - id: lwip_core
   - id: lwip_port_micriumos
