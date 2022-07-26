@@ -101,7 +101,7 @@ static const uint8_t bluetoothConnectedBitmap[] = { BLUETOOTH_CONNECTED_BITMAP }
 /*******************************************************************************
  **************************   LOCAL FUNCTIONS   ********************************
  ******************************************************************************/ \
-  static void mpUIDisplayLogo(void)
+static void mpUIDisplayLogo(void)
 {
   GLIB_drawBitmap(&glibContext,
                   SILICONLABS_X_POSITION,

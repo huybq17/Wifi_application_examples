@@ -1,22 +1,23 @@
 /***************************************************************************//**
  * @file
- * @brief Core Wi-Fi Commissioning application logic.
- *******************************************************************************
+ * @brief Wi-Fi application init.
+/**************************************************************************//**
  * # License
- * <b>Copyright 2020 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
- * The licensor of this software is Silicon Laboratories Inc. Your use of this
- * software is governed by the terms of Silicon Labs Master Software License
- * Agreement (MSLA) available at
- * www.silabs.com/about-us/legal/master-software-license-agreement. This
- * software is distributed to you in Source Code format and is governed by the
- * sections of the MSLA applicable to Source Code.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- ******************************************************************************/
-// Define module name for Power Manager debuging feature.
-#define CURRENT_MODULE_NAME    "APP_COMMON_EXAMPLE_WIFI_COMMISSIONING"
-
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
 #include <stdio.h>
 #include "os.h"
 #include "io.h"
@@ -28,7 +29,7 @@
 #include "sl_simple_button_config.h"
 #include "app_webpage.h"
 #include "app_wifi_events.h"
-#include "app_wifi_commissioning.h"
+#include "app_wifi.h"
 #include "sl_wfx_host.h"
 
 #define START_APP_TASK_PRIO              30u
@@ -56,8 +57,8 @@ static void start_app_task(void *p_arg)
   PP_UNUSED_PARAM(p_arg); // Prevent compiler warning.
 
   OSSemPend(&wfx_init_sem, 0, OS_OPT_PEND_BLOCKING, 0, &err);
-  // Clear the console and buffer
-  printf("Multiprotocol Micrium  OS Example\r\n");
+  // Display the example name
+  printf("Multiprotocol Micrium OS Example\r\n");
 
   app_wifi_events_start();
   webpage_start();
@@ -68,7 +69,7 @@ static void start_app_task(void *p_arg)
 /**************************************************************************//**
  * Wi-Fi Commissioning application init.
  *****************************************************************************/
-void app_wifi_commissioning_init(void)
+void app_wifi_init(void)
 {
   RTOS_ERR err;
 
@@ -85,5 +86,6 @@ void app_wifi_commissioning_init(void)
                DEF_NULL,
                (OS_OPT_TASK_STK_CLR),
                &err);
+
   APP_RTOS_ASSERT_DBG((RTOS_ERR_CODE_GET(err) == RTOS_ERR_NONE), 1);
 }

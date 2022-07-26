@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file
- * @brief Application interface provided to main().
+ * @brief Wi-Fi application init.
 /**************************************************************************//**
  * # License
  * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
@@ -18,13 +18,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *****************************************************************************/
-
-#ifndef APP_H
-#define APP_H
+#ifndef APP_WIFI_H
+#define APP_WIFI_H
 
 /**************************************************************************//**
- * Application Init.
+ * Wi-Fi application init.
  *****************************************************************************/
-void app_init(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#endif /* APP_H */ 
+void app_wifi_init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* APP_WIFI_H */ 

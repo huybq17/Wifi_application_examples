@@ -60,7 +60,7 @@ source:
     folder: wifi
   - path: wifi/app_webpage.c
     folder: wifi
-  - path: wifi/app_wifi_commissioning.c
+  - path: wifi/app_wifi.c
     folder: wifi  
   - path: lwip_host/ethernetif.c
     folder: lwip_host
@@ -88,7 +88,7 @@ include:
         folder: wifi
       - path: app_webpage.h
         folder: wifi
-      - path: app_wifi_commissioning.h
+      - path: app_wifi.h
         folder: wifi
   - path: lwip_host
     file_list:

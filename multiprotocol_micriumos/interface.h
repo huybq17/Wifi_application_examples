@@ -1,3 +1,23 @@
+/***************************************************************************//**
+ * @file
+ * @brief Application entry point.
+/**************************************************************************//**
+ * # License
+ * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ *******************************************************************************
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
 #ifndef INTERFACE_H_
 #define INTERFACE_H_
 
@@ -13,12 +33,16 @@ typedef enum {
   interface_light_trigger_src_wifi       = 2,
 } interface_light_trigger_src_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void interface_light_off(interface_light_trigger_src_t trigger,
                          interface_mac_t *mac);
 
 void interface_light_on(interface_light_trigger_src_t trigger,
                         interface_mac_t *mac);
-void interface_light_toggle (interface_light_trigger_src_t trigger,
+void interface_light_toggle(interface_light_trigger_src_t trigger,
                              interface_mac_t *mac);
 void interface_light_set_state(interface_light_trigger_src_t trigger,
                                interface_mac_t *mac,
@@ -31,4 +55,9 @@ void interface_display_ble_state(bool connected);
 void interface_display_wifi_state(bool connected);
 void interface_display_ble_id(uint8_t *id);
 void interface_display_wifi_id(uint8_t *id);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* INTERFACE_H_ */
