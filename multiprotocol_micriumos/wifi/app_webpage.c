@@ -223,10 +223,15 @@ static void cgi_ssi_init(void)
  * @brief Web server CGI handler for controlling the LEDs.
  ******************************************************************************/
 static const char* toggle_leds_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                        int num_params,
+                                        char* pc_param[],
+                                        char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     interface_light_toggle(interface_light_trigger_src_wifi,
                            (interface_mac_t *)wifi.mac_addr_1.octet);
     /*
@@ -245,10 +250,15 @@ static const char* toggle_leds_cgi_handler(int index,
  * @brief Web server CGI handler to get the LED states.
  ******************************************************************************/
 static const char* get_leds_state_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                            int num_params,
+                                            char* pc_param[],
+                                            char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     return "/leds_state.json";
 }
 
@@ -256,10 +266,15 @@ static const char* get_leds_state_cgi_handler(int index,
  * @brief Web server CGI handler to get the interface states.
  ******************************************************************************/
 static const char* get_interface_states_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                                    int num_params,
+                                                    char* pc_param[],
+                                                    char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     return "/interface_states.json";
 }
 
@@ -267,10 +282,15 @@ static const char* get_interface_states_cgi_handler(int index,
  * @brief Web server CGI handler to start the BLE advertising.
  ******************************************************************************/
 static const char* start_ble_advertising_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                                    int num_params,
+                                                    char* pc_param[],
+                                                    char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     bluetooth_app_start_advertising();
     return "/empty.json";
 }
@@ -279,10 +299,15 @@ static const char* start_ble_advertising_cgi_handler(int index,
  * @brief Web server CGI handler to stop the BLE advertising.
  ******************************************************************************/
 static const char* stop_ble_advertising_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                                    int num_params,
+                                                    char* pc_param[],
+                                                    char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     bluetooth_app_stop_advertising();
     return "/empty.json";
 }
@@ -291,10 +316,15 @@ static const char* stop_ble_advertising_cgi_handler(int index,
  * @brief Web server CGI handler to disconnect the BLE master.
  ******************************************************************************/
 static const char* disconnect_ble_master_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                                    int num_params,
+                                                    char* pc_param[],
+                                                    char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     printf("Disconnect BLE\r\n");
     bluetooth_app_disconnect_master();
     return "/empty.json";
@@ -304,10 +334,12 @@ static const char* disconnect_ble_master_cgi_handler(int index,
  * @brief Web server CGI handler to start the station interface.
  ******************************************************************************/
 static const char* start_station_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                            int num_params,
+                                            char* pc_param[],
+                                            char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);    
+
     sl_status_t status;
     int ssid_length = 0, passkey_length = 0;
 
@@ -375,10 +407,15 @@ static const char* start_station_cgi_handler(int index,
  * @brief Web server CGI handler to stop the station interface.
  ******************************************************************************/
 static const char* stop_station_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                            int num_params,
+                                            char* pc_param[],
+                                            char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     sl_wfx_send_disconnect_command();
 
     return "/empty.json";
@@ -388,14 +425,28 @@ static const char* stop_station_cgi_handler(int index,
  * @brief Web server CGI handler to start the softAP interface.
  ******************************************************************************/
 static const char* start_softap_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                            int num_params,
+                                            char* pc_param[],
+                                            char* pc_value[])
 {
-    sl_wfx_start_ap_command(softap_channel, (uint8_t*)softap_ssid,
-        strlen(softap_ssid), 0, 0, softap_security,
-        0, (uint8_t*)softap_passkey, strlen(softap_passkey),
-        NULL, 0, NULL, 0);
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
+    sl_wfx_start_ap_command(softap_channel, 
+                            (uint8_t*)softap_ssid,
+                            strlen(softap_ssid), 
+                            0, 
+                            0, 
+                            softap_security,
+                            0, 
+                            (uint8_t*)softap_passkey, 
+                            strlen(softap_passkey),
+                            NULL, 
+                            0, 
+                            NULL, 
+                            0);
     return "/empty.json";
 }
 
@@ -403,10 +454,15 @@ static const char* start_softap_cgi_handler(int index,
  * @brief Web server CGI handler to start the softAP interface.
  ******************************************************************************/
 static const char* stop_softap_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                            int num_params,
+                                            char* pc_param[],
+                                            char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     sl_wfx_stop_ap_command();
     return "/empty.json";
 }
@@ -416,10 +472,12 @@ static const char* stop_softap_cgi_handler(int index,
  * interface.
  ******************************************************************************/
 static const char* disconnect_client_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                                int num_params,
+                                                char* pc_param[],
+                                                char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);    
+
     sl_wfx_mac_address_t mac_address;
     const char separator[] = ":";
     char* mac_byte = NULL;
@@ -444,10 +502,15 @@ static const char* disconnect_client_cgi_handler(int index,
  * @brief Web server CGI handler to start a scan.
  ******************************************************************************/
 static const char* start_scan_cgi_handler(int index,
-    int num_params,
-    char* pc_param[],
-    char* pc_value[])
+                                        int num_params,
+                                        char* pc_param[],
+                                        char* pc_value[])
 {
+    PP_UNUSED_PARAM(index);
+    PP_UNUSED_PARAM(num_params);
+    PP_UNUSED_PARAM(pc_param);
+    PP_UNUSED_PARAM(pc_value);
+
     sl_status_t result;
 
     // Reset scan list
@@ -456,19 +519,19 @@ static const char* start_scan_cgi_handler(int index,
 
     // perform a scan on every Wi-Fi channel in active mode
     result = sl_wfx_send_scan_command(WFM_SCAN_MODE_ACTIVE,
-        NULL,
-        0,
-        NULL,
-        0,
-        NULL,
-        0,
-        NULL);
+                                        NULL,
+                                        0,
+                                        NULL,
+                                        0,
+                                        NULL,
+                                        0,
+                                        NULL);
     if ((result == SL_STATUS_OK) || (result == SL_STATUS_WIFI_WARNING))
     {
         sl_wfx_host_setup_waited_event(SL_WFX_SCAN_COMPLETE_IND_ID);
         result = sl_wfx_host_wait_for_confirmation(SL_WFX_SCAN_COMPLETE_IND_ID,
-            SL_WFX_DEFAULT_REQUEST_TIMEOUT_MS,
-            NULL);
+                                            SL_WFX_DEFAULT_REQUEST_TIMEOUT_MS,
+                                            NULL);
     }
 
     return "/scan_results.json";
@@ -476,6 +539,8 @@ static const char* start_scan_cgi_handler(int index,
 
 static uint16_t ssi_handler(int index, char* pc_insert, int insert_len)
 {
+    PP_UNUSED_PARAM(insert_len);
+    
     int value, result = 0;
     char string_field[HTTP_MAX_ITEM_LENGTH];
     char client_name[9] = { 'C', 'l', 'i', 'e', 'n', 't', ' ', ' ', '\0' };
@@ -484,10 +549,8 @@ static uint16_t ssi_handler(int index, char* pc_insert, int insert_len)
 
     switch (index) {
     case 0: // <!--#leds_state-->
-
-      value = interface_light_get_state();
-      result = snprintf(pc_insert, 2, "%d", value);
-
+        value = interface_light_get_state();
+        result = snprintf(pc_insert, 2, "%d", value);
         break;
     case 1: // <!--#scan_list-->
         for (int i = 0; i < scan_count_web; i++) {

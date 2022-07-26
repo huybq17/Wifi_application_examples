@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file
  * @brief Application entry point.
-/**************************************************************************//**
+ *******************************************************************************
  * # License
  * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
@@ -18,8 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *****************************************************************************/
-#ifndef INTERFACE_H_
-#define INTERFACE_H_
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -55,9 +55,10 @@ void interface_display_ble_state(bool connected);
 void interface_display_wifi_state(bool connected);
 void interface_display_ble_id(uint8_t *id);
 void interface_display_wifi_id(uint8_t *id);
+void interface_init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* INTERFACE_H_ */
+#endif /* INTERFACE_H */

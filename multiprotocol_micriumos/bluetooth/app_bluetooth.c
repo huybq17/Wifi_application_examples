@@ -1,7 +1,7 @@
 /***************************************************************************//**
  * @file app_bluetooth.c 
  * @brief Core bluetooth application logic.
-/**************************************************************************//**
+ *******************************************************************************
  * # License
  * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
@@ -19,6 +19,7 @@
  * limitations under the License.
  *****************************************************************************/
 #include <stdbool.h>
+#include <stdio.h>
 #include "em_common.h"
 #include "app_assert.h"
 #include "sl_bluetooth.h"
@@ -286,7 +287,7 @@ void bluetooth_app_start_advertising(void)
  * @param[out]  None
  * @return      None
  ******************************************************************************/
-void bluetooth_app_stop_advertising (void)
+void bluetooth_app_stop_advertising(void)
 {
   sl_status_t sc;
 
@@ -373,8 +374,6 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
   bd_addr address;
   uint8_t address_type;
   uint8_t system_id[8];
-
-  int res = -1; 
 
   // Check if an indication is pending
   if (ble_indication_pending & !ble_indication_ongoing) {

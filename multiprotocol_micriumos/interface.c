@@ -2,7 +2,7 @@
  * @file  interface.c
  * @brief Provides interfaces used to interact with light/LED state & update to 
  *        the LCD scree.
-/**************************************************************************//**
+ *******************************************************************************
  * # License
  * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************

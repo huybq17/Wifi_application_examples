@@ -1,8 +1,7 @@
 /***************************************************************************//**
  * @file app_bluetooth.h
- * @brief Bluetooth app user-defined types & public functions.
+ * @brief Bluetooth app user-defined types & public functions. 
  *******************************************************************************
-/**************************************************************************//**
  * # License
  * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
@@ -86,6 +85,8 @@ int  bluetooth_app_get_master_mac(bd_addr *mac);
 void bluetooth_app_get_own_name(char *name, int name_size);
 int  bluetooth_app_get_master_name(char *name, int name_size);
 void bluetooth_app_disconnect_master(void);
+void bluetooth_app_start_advertising(void);
+void bluetooth_app_stop_advertising(void);
 
 #ifdef __cplusplus
 }
