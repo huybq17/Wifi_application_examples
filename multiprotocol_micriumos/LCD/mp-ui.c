@@ -15,7 +15,7 @@
  *
  ******************************************************************************/
 
-#ifndef EFR32MG24B020F1536IM48 
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
 
 #include <LCD/mp-bitmaps.h>
 #include "em_types.h"
