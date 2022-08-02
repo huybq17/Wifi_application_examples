@@ -19,16 +19,14 @@ component:
   - id: bluetooth_feature_scanner
   - id: component_catalog  
   - id: rail_util_pti
-  - id: app_log
-  - id: app_assert
+  
+  
   - id: mpu
   - id: simple_button
     instance: [btn0, btn1]
   - id: simple_led
     instance: [led0, led1]
-  - id: iostream_recommended_stream
-  - id: iostream_stdlib_config
-  - id: iostream_retarget_stdio
+  
   - id: dmadrv
   - id: sleeptimer
   - id: simple_timer_micriumos
@@ -48,8 +46,7 @@ component:
   - id: lwip_netif_ethernet
   - id: lwip_app_http
   - id: wfx_secure_link
-  - id: demo_ui
-  - id: dmd_memlcd
+  
 source:
   - path: main.c
   - path: app.c

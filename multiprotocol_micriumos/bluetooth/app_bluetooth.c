@@ -29,7 +29,7 @@
  ******************************************************************************/
 #include <stdbool.h>
 #include "em_common.h"
-#include "app_assert.h"
+//#include "app_assert.h"
 #include "sl_bluetooth.h"
 #include "gatt_db.h"
 #include "app.h"
@@ -231,7 +231,7 @@ void bluetooth_app_start_advertising(void)
                               is_connectable ?
                               sl_bt_advertiser_connectable_scannable :
                               sl_bt_advertiser_scannable_non_connectable);
-  app_assert_status(sc);
+  // app_assert_status(sc);
 
   if (sc == SL_STATUS_OK) {
     ble_state |= BLE_STATE_ADVERTISING;
@@ -243,7 +243,7 @@ void bluetooth_app_stop_advertising (void)
   sl_status_t sc;
 
   sc = sl_bt_advertiser_stop(advertising_set_handle);
-  app_assert_status(sc);
+  // app_assert_status(sc);
   if (sc == SL_STATUS_OK) {
     ble_state &= ~BLE_STATE_ADVERTISING;
   }
@@ -341,7 +341,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 
       // Extract unique ID from BT Address.
       sc = sl_bt_system_get_identity_address(&address, &address_type);
-      app_assert_status(sc);
+      // app_assert_status(sc);
 
       // Pad and reverse unique ID to get System ID.
       system_id[0] = address.addr[5];
@@ -357,7 +357,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
                                                    0,
                                                    sizeof(system_id),
                                                    system_id);
-      app_assert_status(sc);
+      // app_assert_status(sc);
 
       memcpy((void *)&ble_own_addr, (void *)&address, sizeof(ble_own_addr));
 
@@ -371,14 +371,14 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 
       // Create an advertising set.
       sc = sl_bt_advertiser_create_set(&advertising_set_handle);
-      app_assert_status(sc);
+      // app_assert_status(sc);
 
       // Change the default device name (MP Demo)
       sc = sl_bt_gatt_server_write_attribute_value(DEV_NAME_GATDB,
                                               0,
                                               strlen(ble_own_name),
                                               (const uint8_t *)ble_own_name);
-      app_assert_status(sc);
+      // app_assert_status(sc);
 
       // Set advertising interval to 100ms.
       sc = sl_bt_advertiser_set_timing(
@@ -387,7 +387,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
                               160, // max. adv. interval (milliseconds * 1.6)
                               0,   // adv. duration
                               0);  // max. num. adv. events
-      app_assert_status(sc);
+      // app_assert_status(sc);
       // Start general advertising and enable connections.
       bluetooth_app_start_advertising();
       break;

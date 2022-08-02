@@ -15,6 +15,8 @@
  *
  ******************************************************************************/
 
+#ifndef EFR32MG24B020F1536IM48 
+
 #include <LCD/mp-bitmaps.h>
 #include "em_types.h"
 #include "glib.h"
@@ -322,3 +324,4 @@ void mpUIClearMainScreen(uint8_t* name, bool showPROT1, bool showPROT2)
     mpUIClearDirection(MP_UI_DIRECTION_PROT2);
   }
 }
+#endif
