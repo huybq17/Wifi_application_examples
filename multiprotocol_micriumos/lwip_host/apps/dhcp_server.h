@@ -1,5 +1,10 @@
-/**************************************************************************//**
- * Copyright 2019, Silicon Laboratories Inc.
+/***************************************************************************//**
+ * @file
+ * @brief LwIP DHCP server interfaces
+*******************************************************************************
+ * # License
+ * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -1,6 +1,7 @@
 /***************************************************************************//**
- * @file
- * @brief Application entry point.
+ * @file  interface.h
+ * @brief Provides public functions for interactions with light/LED states & 
+ *        update to the LCD screen.
  *******************************************************************************
  * # License
  * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>

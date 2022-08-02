@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
  * @brief LwIP configuration header file.
- *******************************************************************************
+  *******************************************************************************
  * # License
- * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
