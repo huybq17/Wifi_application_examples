@@ -20,7 +20,7 @@ static void clear_direction_timer_callback (sl_sleeptimer_timer_handle_t *handle
 {
   (void)handle;
   (void)data;
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   mpUIClearDirection(MP_UI_DIRECTION_PROT1);
   mpUIClearDirection(MP_UI_DIRECTION_PROT2);
 #endif
@@ -91,14 +91,14 @@ void interface_light_get_mac_trigger (interface_mac_t *mac)
 
 void interface_display_ble_state (bool connected)
 {
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   mpUIDisplayProtocol(MP_UI_PROTOCOL2, connected);
 #endif
 }
 
 void interface_display_wifi_state (bool connected)
 {
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   mpUIDisplayProtocol(MP_UI_PROTOCOL1, connected);
 #endif
 
@@ -111,7 +111,7 @@ void interface_display_ble_id (uint8_t *id)
   // Only 5 characters are displayed correctly when the light is on
   sprintf(dev_id, "    %02X%02X", id[1], id[0]);
 
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   mpUIDisplayId(MP_UI_PROTOCOL2, (uint8_t *)dev_id);
 #endif
 
@@ -122,7 +122,7 @@ void interface_display_ble_id (uint8_t *id)
 
 void interface_display_wifi_id (uint8_t *id)
 {
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   mpUIDisplayId(MP_UI_PROTOCOL1, id);
 #endif
 }
@@ -133,7 +133,7 @@ static void apply_light_change (interface_light_trigger_src_t trigger,
 {
   sl_status_t status;
 
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   // Update the LCD
   mpUIDisplayLight(new_state);
   
@@ -192,7 +192,7 @@ static void apply_light_change (interface_light_trigger_src_t trigger,
 void interface_init(void)
 {
   
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48)
+#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
   // Timer for clearing direction arrows on LCD
   sl_sleeptimer_init();
 
