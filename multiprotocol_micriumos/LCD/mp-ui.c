@@ -15,15 +15,21 @@
  *
  ******************************************************************************/
 
-#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
+//#if ! defined(EFR32MG24B020F1536IM48) && ! defined(EFR32MG24A020F1536GM48) && ! defined(EFR32MG24B220F1536IM48)
 
 #include <LCD/mp-bitmaps.h>
+#include "interface.h"
+
+#if !BRD4187X
+
 #include "em_types.h"
 #include "glib.h"
 #include "dmd/dmd.h"
 #include <string.h>
 #include <stdio.h>
 #include "mp-ui.h"
+
+
 
 #define PROT_ZIGBEE     (1)
 #define PROT_RAIL       (2)
