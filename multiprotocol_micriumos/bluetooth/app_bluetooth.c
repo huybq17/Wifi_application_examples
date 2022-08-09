@@ -29,7 +29,6 @@
 #if !BRD4187X
 #include "app_assert.h"
 #endif
-
 char boot_message[MAX_BUF_LEN];
 
 // The advertising set handle allocated from Bluetooth stack.
