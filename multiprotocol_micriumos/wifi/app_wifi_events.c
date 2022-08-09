@@ -3,7 +3,7 @@
  * @brief Wi-Fi messages processing
  *******************************************************************************
  * # License
- * <b>Copyright 2019 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,8 @@
 #include "dhcp_server.h"
 #include "app_webpage.h"
 #include "app_wifi_events.h"
+#include "interface.h"
+
 // Event Task Configurations
 #define WFX_EVENTS_TASK_PRIO              21u
 #define WFX_EVENTS_TASK_STK_SIZE        1024u

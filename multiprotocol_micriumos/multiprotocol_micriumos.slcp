@@ -19,14 +19,11 @@ component:
   - id: bluetooth_feature_scanner
   - id: component_catalog  
   - id: rail_util_pti
-
-
   - id: mpu
   - id: simple_button
     instance: [btn0, btn1]
   - id: simple_led
     instance: [led0, led1]
-
   - id: dmadrv
   - id: sleeptimer
   - id: simple_timer_micriumos
