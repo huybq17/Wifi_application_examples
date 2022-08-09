@@ -74,9 +74,8 @@ static void apply_light_change (interface_light_trigger_src_t trigger,
                                 interface_mac_t *mac,
                                 uint8_t new_state)
 {
-  sl_status_t status;
-
 #if !BRD4187X
+  sl_status_t status;
   // Update the LCD
   mpUIDisplayLight(new_state);
   
