@@ -25,6 +25,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include "sl_bt_types.h" 
+#include "sl_component_catalog.h"
 
 #define BRD4187X (defined(EFR32MG24B020F1536IM48)     \
                   || defined(EFR32MG24A020F1536GM48)  \ 

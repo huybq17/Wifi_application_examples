@@ -22,7 +22,7 @@
 #include <LCD/mp-bitmaps.h>
 #include "interface.h"
 
-#if !BRD4187X
+#if !BRD4187X || defined(SL_CATALOG_DMD_MEMLCD_PRESENT)
 
 #include "em_types.h"
 #include "glib.h"
