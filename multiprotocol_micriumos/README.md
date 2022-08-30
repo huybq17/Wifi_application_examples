@@ -12,8 +12,8 @@ A Wi-Fi SoftAP interface is also provided by the device allowing to connect and 
 
 One of the supported platforms listed below is required to run the example:
 
-* [**EFR32xG21 Wireless Gecko Starter Kit (SLWSTK6006A)**](https://www.silabs.com/products/development-tools/wireless/efr32xg21-wireless-starter-kit) or
-  [**EFR32™ Mighty Gecko Wireless Starter Kit (SLWSTK6000B)**](https://www.silabs.com/products/development-tools/wireless/mesh-networking/mighty-gecko-starter-kit)
+* [**EFR32xG21 Wireless Gecko Starter Kit (SLWSTK6006A)**](https://www.silabs.com/products/development-tools/wireless/efr32xg21-wireless-starter-kit),
+  [**EFR32™ Mighty Gecko Wireless Starter Kit (SLWSTK6000B)**](https://www.silabs.com/products/development-tools/wireless/mesh-networking/mighty-gecko-starter-kit), and [**EFR32xG24 Wireless Gecko Pro Kit**](https://www.silabs.com/development-tools/wireless/efr32xg24-pro-kit-20-dbm)
 * [**WF200 Wi-Fi® Expansion Kit (SLEXP8022A)**](https://www.silabs.com/products/development-tools/wireless/wi-fi/wf200-expansion-kit) or
   [**WFM200S Wi-Fi® Expansion Kit (SLEXP8023A)**](https://www.silabs.com/products/development-tools/wireless/wi-fi/wfm200-expansion-kit)
 
@@ -25,22 +25,26 @@ Additionally, this example requires:
 ### Software Prerequisites
 
 * The required software includes Simplicity Studio v5, the Gecko SDK Suite (32-bit MCU and lwIP) and the Bluetooth SDK
-* The example projects available in this repository
+* The example project and the Wi-Fi Full MAC driver (available in the Gecko Platform SDK)
 * The **EFR Connect BLE Mobile App** available on [**Google Play**](https://play.google.com/store/apps/details?id=com.siliconlabs.bledemo&hl=en&gl=US) and [**App Store**](https://apps.apple.com/us/app/efr-connect-ble-mobile-app/id1030932759)
 * A Serial terminal to communicate with the board. For example, [**Tera Term**](https://osdn.net/projects/ttssh2/releases/) or [**Putty**](https://www.putty.org/)
 * A Web browser 
 
+## Install Simplicity Studio 5 and the Gecko SDK
+
+Simplicity Studio 5 is a free software suite needed to start developing your application. To install Simplicity Studio 5, please follow this [**procedure**](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-getting-started/install-ss-5-and-software) by selecting the options **[Install by connecting device(s)]** and **[Auto]**.
+
 ## Set Up your Kit
+**Note: for EFR32xG24, we support both plug-and-play mode and flying-wires mode. In the plug-and-play mode, LCD and VCOM are disabled. In flying-wires mode, all features are available.
 
 Please follow the instructions related to the platform suiting your case:
-
-* [**EFR32xG21 Wireless Gecko Starter Kit setup**](../../shared/doc/efr32xg21/efr32xg21-wfx-setup.md)
-* [**EFR32 Mighty Gecko Wireless Starter Kit setup**](../../shared/doc/efr32mg12/efr32mg12-wfx-setup.md)
+* [**EFR32xG24 Wireless Gecko Pro Kit setup**](efr32xg24-wfx-setup.md) (For plug-and-play mode, user can skip this setup guidelines)
+* [**EFR32xG21 Wireless Gecko Starter Kit setup**]()
 
 ## Start the Example
 
 1. Once the binary file transferred, the example starts sending BLE advertisements/beacons, launches a SoftAP interface named _**multiprotocol_softap**_
-and displays the LED and the interface connection states on the LCD screen of the board (except for EFR32xG21 devices)
+and displays the LED and the interface connection states on the LCD screen of the board (except for EFR32xG21 devices and EFR32xG24 devices in plug-and-play mode)
 2. Enable the Bluetooth on your smartphone
 3. Launch the EFR Connect BLE Mobile App and start the **Connected Lighting Demo** under the **Demo** view.
 4. Select your BLE platform from the list of detected devices, it should be named **MPxxxx**.
@@ -48,12 +52,12 @@ If several devices are displayed, the two last bytes of the BLE MAC address, com
 5. Your smartphone is now connected to the device using the Bluetooth interface.
 Two dots are displayed on each side of the Bluetooth logo on the LCD screen to indicate this state of connection.
 6. Touch the light bulb displayed by the application on the smartphone and watch the board LEDs toggle.
-The LED state is also toggled on the LCD screen and an arrow appears shortly next to the Bluetooth logo to indicate the source of the light toggle.
+The LED state is also toggled on the LCD screen and an arrow appears shortly next to the Bluetooth logo to indicate the source of the light toggle. This arrow disappears after a second.
 7. Enable the Wi-Fi on your smartphone
 8. Connect to the Access Point _**multiprotocol_softap**_ provided by the device, with the password **changeme**.
 9. Open a Web browser on your smartphone and go to [http://10.10.0.1/](http://10.10.0.1/). If a popup appears due to a lack of Internet connectivity on the Wi-Fi interface
 make sure to request to stay connected, otherwise the Web page may not be displayed in your browser. 
-1.  The displayed Web page not only gives the possibility to toggle the LEDs as the EFR Connect BLE Mobile App but it also gives more like:
+1.  The displayed Web page not only gives the possibility to toggle the LEDs as the EFR Connect BLE Mobile App but it also allows to:
     * Shutdown an active BLE connection
     * Enable/disable the BLE advertisements
     * Shutdown active connections to the Wi-Fi Softap
