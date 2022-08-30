@@ -20,19 +20,26 @@
 <img src=02-example-project-and-demos.png>
 3. After project creation, open the .slcp file to add components and configure the pinout:
 * Enable Display: Open **SOFTWARE COMPONENTS**, search for **Board Control** and click **Configure**
+
 <img src=03-board-control.png>
+
 Then, slide the **Enable Display** to the right to activate
+
 <img src=04-board-control-enable-display.png>
+
 * Enable VCOM: search for the **IO Stream: EUSART** and click **Install**. Enter a name for it, e.g. vcom.
+
 <img src=05-iostream-eusart-install.png>
 
 After installing the component, click on **Configure**, scroll down to find section **SL_IOSTREAM_EUSART_VCOM**. Change the config as follows.
+
 <img src=06-iostream-eusart-config.png>
+
 Ignore the warning on TX, upcoming configurations will fix this conflict.
 * Configure WFx Bus SPI: Search for **WFx Bus SPI** component and config the pins under **SL_WFX_HOST_PINOUT_SPI** and **SL_WFX_HOST_PINOUT_SPI_WIRQ**:
 <img src=07-wfx-bus-spi.png>
 * Configure the WFx FMAC driver: 
-* Configure in pin tool
+<img src=07.5-wfx-fmac-driver.png>
 * Install **IO Stream: Retarget STDIO**
 <img src=08-iostream-retarget-stdio.png>
 * Install **UI Demo Functions**
