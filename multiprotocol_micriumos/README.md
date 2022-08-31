@@ -35,10 +35,10 @@ Additionally, this example requires:
 Simplicity Studio 5 is a free software suite needed to start developing your application. To install Simplicity Studio 5, please follow this [**procedure**](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-getting-started/install-ss-5-and-software) by selecting the options **[Install by connecting device(s)]** and **[Auto]**.
 
 ## Set Up your Kit
-**Note: for EFR32xG24, we support both plug-and-play mode and flying-wires mode. In the plug-and-play mode, LCD and VCOM are disabled. In flying-wires mode, all features are available.
+> **Note**: For EFR32xG24, we support both plug-and-play mode and flying-wires mode. In the plug-and-play mode, LCD and VCOM are disabled by default. In flying-wires mode, all features (VCOM & LCD) are available.
 
 Please follow the instructions related to the platform suiting your case:
-* [**EFR32xG24 Wireless Gecko Pro Kit setup**](efr32xg24-wfx-setup.md) (For plug-and-play mode, user can skip this setup guidelines)
+* [**EFR32xG24 Wireless Gecko Pro Kit setup**](resources/efr32xg24-wfx-setup.md) (For plug-and-play mode, user can skip this setup guidelines)
 * [**EFR32xG21 Wireless Gecko Starter Kit setup**]()
 
 ## Start the Example

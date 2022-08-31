@@ -15,9 +15,9 @@
 
 # Import the Multiprotocol Example Project into Simplicity Studio
 1. Open the Launcher in Simplicity Studio 5. It should recognize your connected devices. Click on **Start** button.
-<img src=01-launcher-jlink.png>
+<img src=01-launcher-jlink.PNG>
 2. Choose EXAMPLE PROJECTS & DEMOS, and click on the **CREATE** button. The "Project Configuration" dialog should appear. Rename the project if necessary and click on **FINISH**.
-<img src=02-example-project-and-demos.png>
+<img src=02-example-project-and-demos.PNG>
 3. After project creation, open the .slcp file to add components and configure the pinout:
 * Enable Display: Open **SOFTWARE COMPONENTS**, search for **Board Control** and click **Configure**
 
@@ -29,19 +29,19 @@ Then, slide the **Enable Display** to the right to activate
 
 * Enable VCOM: search for the **IO Stream: EUSART** and click **Install**. Enter a name for it, e.g. vcom.
 
-<img src=05-iostream-eusart-install.png>
+<img src=05-iostream-eusart-install.PNG>
 
 After installing the component, click on **Configure**, scroll down to find section **SL_IOSTREAM_EUSART_VCOM**. Change the config as follows.
 
-<img src=06-iostream-eusart-config.png>
+<img src=06-iostream-eusart-config.PNG>
 
 Ignore the warning on TX, upcoming configurations will fix this conflict.
 * Configure WFx Bus SPI: Search for **WFx Bus SPI** component and config the pins under **SL_WFX_HOST_PINOUT_SPI** and **SL_WFX_HOST_PINOUT_SPI_WIRQ**:
-<img src=07-wfx-bus-spi.png>
+<img src=07-wfx-bus-spi.PNG>
 * Configure the WFx FMAC driver: 
-<img src=07.5-wfx-fmac-driver.png>
+<img src=07.5-wfx-fmac-driver.PNG>
 * Install **IO Stream: Retarget STDIO**
-<img src=08-iostream-retarget-stdio.png>
+<img src=08-iostream-retarget-stdio.PNG>
 * Install **UI Demo Functions**
-<img src=09-ui-demo.png>
+<img src=09-ui-demo.PNG>
 4. Build the Project and Run it on the flying-wired Kit.
