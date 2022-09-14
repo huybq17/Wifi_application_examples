@@ -39,7 +39,7 @@ Simplicity Studio 5 is a free software suite needed to start developing your app
 
 Please follow the instructions related to the platform suiting your case:
 * [**EFR32xG24 Wireless Gecko Pro Kit setup**](resources/efr32xg24-wfx-setup.md) (For plug-and-play mode, user can skip this setup guidelines)
-* [**EFR32xG21 Wireless Gecko Starter Kit setup**]()
+* [**EFR32xG21 Wireless Gecko Starter Kit setup**](resources/efr32xg21-wfx-setup.md)
 
 ## Start the Example
 
