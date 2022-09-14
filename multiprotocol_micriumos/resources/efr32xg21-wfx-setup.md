@@ -24,6 +24,6 @@
 ## Importing the Example Project into Simplicity Studio
 
 1. Open the Launcher in Simplicity Studio 5. It should recognize your connected devices. Click on **Start** button.
-<img src=xg21-launcher-jlink.PNG>
+<img src=xg21-launcher-jlink.png>
 2. Choose EXAMPLE PROJECTS & DEMOS, and click on the **CREATE** button. The "Project Configuration" dialog should appear. Rename the project if necessary and click on **FINISH**.
-<img src=xg21-example-project-and-demos.PNG>
+<img src=xg21-example-project-and-demos.png>
