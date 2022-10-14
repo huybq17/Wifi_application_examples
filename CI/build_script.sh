@@ -126,13 +126,20 @@ do
         echo "Running: git apply --stat driver.patch"
         git apply --stat driver.patch
         echo "Running: git apply --check driver.patch"
-        git apply --check driver.patch
-        git apply driver.patch
+        git apply --check driver.patch        
         res=$?
         if [ $res -ne 0 ]
         then
-            echo "#WARNING: Failed to apply or already applied driver patch file of the $project project!!!"            
+            echo "#WARNING: Failed to apply or already applied driver patch file of the $project project!!!"
+            echo "#WARNING: If the patch have been already applied, the project can be built successfully!"
+            echo "#WARNING: If failed to apply the patch, the project build would be failed"
+            cd ../
+            continue # skips, don't apply the patch file
         fi
+
+        echo "Running: git apply driver.patch"
+        git apply driver.patch
+        
         cd ../
         echo "Going back wfx-fullMAC-tools repo"
     fi
