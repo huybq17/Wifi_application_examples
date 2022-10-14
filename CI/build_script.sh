@@ -123,14 +123,15 @@ do
         cp ./$project/patches/driver.patch ./gecko_sdk
         echo "Going to gecko_sdk folder & applying driver.patch file to wfx-fmac-driver component!"
         cd ./gecko_sdk
+        echo "Running: git apply --stat driver.patch"
         git apply --stat driver.patch
+        echo "Running: git apply --check driver.patch"
         git apply --check driver.patch
         git apply driver.patch
         res=$?
         if [ $res -ne 0 ]
         then
-            echo "Failed to apply driver patch file of the $project project!!!"
-            exit 1
+            echo "#WARNING: Failed to apply or already applied driver patch file of the $project project!!!"            
         fi
         cd ../
         echo "Going back wfx-fullMAC-tools repo"
