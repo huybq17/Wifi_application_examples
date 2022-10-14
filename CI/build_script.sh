@@ -126,6 +126,12 @@ do
         git apply --stat driver.patch
         git apply --check driver.patch
         git apply driver.patch
+        res=$?
+        if [ $res -ne 0 ]
+        then
+            echo "Failed to apply driver patch file of the $project project!!!"
+            exit 1
+        fi
         cd ../
         echo "Going back wfx-fullMAC-tools repo"
     fi
