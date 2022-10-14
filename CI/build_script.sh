@@ -115,7 +115,21 @@ do
         echo "Removing the older out_$project"
         rm -rf out_$project
     fi
-
+    
+    # Check if there is any patch files: driver or apps
+    if [ -f ./$project/patches/driver.patch ]
+    then
+        echo "Copying the driver.patch file to the gecko_sdk folder!"
+        cp ./$project/patches/driver.patch ./gecko_sdk
+        echo "Going to gecko_sdk folder & applying driver.patch file to wfx-fmac-driver component!"
+        cd ./gecko_sdk
+        git apply --stat driver.patch
+        git apply --check driver.patch
+        git apply driver.patch
+        cd ../
+        echo "Going back wfx-fullMAC-tools repo"
+    fi
+    
     # Create the output project folder containing all board-support generated projects
     mkdir out_$project && mkdir ./$OUT_FOLDER/out_$project
 
