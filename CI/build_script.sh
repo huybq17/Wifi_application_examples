@@ -6,7 +6,7 @@ echo "PROJECTS_NAME = $PROJECTS_NAME"
 echo "AGENT_WORKSPACE = $AGENT_WORKSPACE"
 echo "BOARD_IDs = $BOARD_IDs"
 echo "PATCH_BOARDs = $PATCH_BOARDs"
-echo "PATCH_APPs = $PATCH_BOARDs"
+echo "PATCH_APPs = $PATCH_APPs"
 echo "GIT_BRANCH = $GIT_BRANCH"
 echo "GIT_COMMIT = $GIT_COMMIT"
 
@@ -120,7 +120,7 @@ git_apply_reverse_driver_patch() {
             
             cd ../
             echo "Going back wfx-fullMAC-tools repo"
-            IS_APP_PATCHED=1
+            IS_DRIVER_PATCHED=1
         else
             echo "Driver'patch is already applied!!"
         fi
@@ -137,7 +137,7 @@ git_apply_reverse_driver_patch() {
             
             cd ../
             echo "Going back wfx-fullMAC-tools repo"
-            IS_APP_PATCHED=0
+            IS_DRIVER_PATCHED=0
         else
             echo "Driver'patch is not applied!! can't reverse"
         fi
