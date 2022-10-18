@@ -88,26 +88,28 @@ git_apply_reverse_patch() {
     local project_name=$3
 
     if [[ $project_name =~ .*"$PATCH_APPs".* ]] && \
-        [[ $board_id =~ .*"$PATCH_BOARDs".* ]] && \
-        [[ $apply_or_reverse -eq 1 ]]
+        [[ $board_id =~ .*"$PATCH_BOARDs".* ]]        
     then
-        # Apply "application" patch to the source project if brd4187a/b/c
+        if [[ $apply_or_reverse -eq 1 ]]
+        then
+            # Apply "application" patch to the source project if brd4187a/b/c
         
-        echo "Going into $project_name ...."
-        cd ./$project_name
-        echo "git apply --check ./patches/$PATCH_BOARDs/app.patch"
-        git apply --check ./patches/$PATCH_BOARDs/app.patch
-        echo "git apply ./patches/brd4187/app.patch"
-        git apply ./patches/$PATCH_BOARDs/app.patch
-        cd ../
-        IS_PATCHED=1 #patched
-    else 
-        echo "Going into $project_name ...."
-        cd ./$project_name
-        echo "git apply -R ./patches/$PATCH_BOARDs/app.patch"
-        git apply -R ./patches/$PATCH_BOARDs/app.patch
-        cd ../
-        IS_PATCHED=0 #not_patched
+            echo "Going into $project_name to apply patch ...."
+            cd ./$project_name
+            echo "git apply --check ./patches/$PATCH_BOARDs/app.patch"
+            git apply --check ./patches/$PATCH_BOARDs/app.patch
+            echo "git apply ./patches/brd4187/app.patch"
+            git apply ./patches/$PATCH_BOARDs/app.patch
+            cd ../
+            IS_PATCHED=1 #patched
+        else
+            echo "Going into $project_name to reverse applied patch file...."
+            cd ./$project_name
+            echo "git apply -R ./patches/$PATCH_BOARDs/app.patch"
+            git apply -R ./patches/$PATCH_BOARDs/app.patch
+            cd ../
+            IS_PATCHED=0 #not_patched
+        fi
     fi
 }
 
@@ -199,7 +201,7 @@ do
             echo "#WARNING: If the patch have been already applied, the project can be built successfully! Don't worry!"
             echo "#ERROR: If failed to apply the patch, the project build would be failed! Must worry about applying the patch file successfully!"
             cd ../
-            continue # skips, don't apply the patch file
+            #continue # skips, don't apply the patch file
         fi
 
         echo "Running: git apply driver.patch"
