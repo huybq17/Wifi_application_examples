@@ -206,6 +206,8 @@ override_config_files() {
         echo "Check contents of overriden config files"
         cat out_$project/$BRD_PRJ_NAME/config/sl_iostream_eusart_vcom_config.h
         cat out_$project/$BRD_PRJ_NAME/config/sl_wfx_host_bus_pinout.h
+    else
+        echo "The $project_name does not have config files for overriding!"
     fi
 }
 
@@ -307,8 +309,9 @@ do
         # Copy the config_files to override the default config files. Called this
         # function after project generation & the project is patched
         if [ $IS_APP_PATCHED -eq 1 ]
-        then   
-            override_config_files $board_id $project_name
+        then
+            echo "Checkinng & overriding the default config header file by ours! "
+            override_config_files $board_id $project
         fi
 
         # Going to generated project & Build the project
