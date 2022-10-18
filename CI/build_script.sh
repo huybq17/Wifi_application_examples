@@ -224,6 +224,7 @@ cd ./gecko_sdk
 echo "Checking if having driver.patch!"
 if [ -f driver.patch ]
 then
+    echo "There is driver.patch inside gecko_sdk! Git reverse"
     git apply -R driver.patch
     rm -rf driver.patch
 fi
