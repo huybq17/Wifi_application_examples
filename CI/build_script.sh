@@ -13,8 +13,8 @@ PROJECT_BRANCH=${GIT_BRANCH//'/'/'_'}
 COMMIT_ID=${GIT_COMMIT:0:8}
 
 # GLOBAL VARIABLES #
-IS_PATCHED=0
-
+IS_APP_PATCHED=0
+IS_DRIVER_PATCHED=0
 
 ##### HELPER FUNCTIONS
 # is_supported() function checks this board is supported by this project.
@@ -74,14 +74,85 @@ is_supported() {
     return 0 #true
 }
 
-# git_apply_reverse_patch() function apply or reverse the application patch.
+# git_apply_reverse_driver_patch() function apply or reverse the driver patch.
+#   For applying patch, called this function before begin of building process.
+#   For reverse patch, called after end of building process
+# Arguments:
+#   + arg1: apply_or_reverse (1: apply; 0: reverse)
+#   + arg2: project_name
+git_apply_reverse_driver_patch() {
+
+    local apply_or_reverse=$1
+    local project_name=$2
+
+    if [ ! -f ./$project_name/patches/driver.patch ]
+    then    
+        echo "Not found ./$project_name/patches/driver.patch!"
+        continue
+    fi
+
+    if [ $apply_or_reverse -eq 1 ]
+    then
+        # Check if there is any patch files: driver patch file.
+        if [ $IS_DRIVER_PATCHED -eq 0 ]
+        then
+            # Driver's patch is not applied --> Apply now.
+            echo "Copying the ./$project_name/patches/driver.patch file to the gecko_sdk folder!"
+            cp ./$project/patches/driver.patch ./gecko_sdk
+            echo "Going to gecko_sdk folder & applying driver.patch file to wfx-fmac-driver component!"
+            cd ./gecko_sdk
+            echo "Running: git apply --stat driver.patch"
+            git apply --stat driver.patch
+            echo "Running: git apply --check driver.patch"
+            git apply --check driver.patch        
+            res=$?
+            if [ $res -ne 0 ]
+            then
+                echo "#NOTICE: There are 02 possibilities of errors: Failed to apply or already applied driver patch file of the $project project!!!"
+                echo "#WARNING: If the patch have been already applied, the project can be built successfully! Don't worry!"
+                echo "#ERROR: If failed to apply the patch, the project build would be failed! Must worry about applying the patch file successfully!"
+                cd ../
+                #continue # skips, don't apply the patch file
+            fi
+
+            echo "Running: git apply driver.patch"
+            git apply driver.patch
+            
+            cd ../
+            echo "Going back wfx-fullMAC-tools repo"
+            IS_APP_PATCHED=1
+        else
+            echo "Driver'patch is already applied!!"
+        fi
+        
+    else
+        #reverse applied patch
+        if [ $IS_DRIVER_PATCHED -eq 1 ]
+        then
+            # Driver's patch is applied --> reverse now.            
+            echo "Going to gecko_sdk folder & reversing driver.patch file to wfx-fmac-driver component!"
+            cd ./gecko_sdk
+            echo "Running: git apply -R driver.patch"
+            git apply -R driver.patch
+            
+            cd ../
+            echo "Going back wfx-fullMAC-tools repo"
+            IS_APP_PATCHED=0
+        else
+            echo "Driver'patch is not applied!! can't reverse"
+        fi
+    fi
+    
+}
+
+# git_apply_reverse_app_patch() function apply or reverse the application patch.
 #   For applying patch, called this function before project generation.
 #   For reverse patch, called after building the project
 # Arguments:
 #   + arg1: apply_or_reverse (1: apply; 0: reverse)
 #   + arg2: board_id
 #   + arg3: project_name
-git_apply_reverse_patch() {
+git_apply_reverse_app_patch() {
     
     local apply_or_reverse=$1
     local board_id=$2
@@ -101,14 +172,14 @@ git_apply_reverse_patch() {
             echo "git apply ./patches/brd4187/app.patch"
             git apply ./patches/$PATCH_BOARDs/app.patch
             cd ../
-            IS_PATCHED=1 #patched
+            IS_APP_PATCHED=1 #patched
         else
             echo "Going into $project_name to reverse applied patch file...."
             cd ./$project_name
             echo "git apply -R ./patches/$PATCH_BOARDs/app.patch"
             git apply -R ./patches/$PATCH_BOARDs/app.patch
             cd ../
-            IS_PATCHED=0 #not_patched
+            IS_APP_PATCHED=0 #not_patched
         fi
     fi
 }
@@ -183,33 +254,8 @@ do
         rm -rf out_$project
     fi
     
-    # Check if there is any patch files: driver or apps
-    if [ -f ./$project/patches/driver.patch ]
-    then
-        echo "Copying the driver.patch file to the gecko_sdk folder!"
-        cp ./$project/patches/driver.patch ./gecko_sdk
-        echo "Going to gecko_sdk folder & applying driver.patch file to wfx-fmac-driver component!"
-        cd ./gecko_sdk
-        echo "Running: git apply --stat driver.patch"
-        git apply --stat driver.patch
-        echo "Running: git apply --check driver.patch"
-        git apply --check driver.patch        
-        res=$?
-        if [ $res -ne 0 ]
-        then
-            echo "#NOTICE: There are 02 possibilities of errors: Failed to apply or already applied driver patch file of the $project project!!!"
-            echo "#WARNING: If the patch have been already applied, the project can be built successfully! Don't worry!"
-            echo "#ERROR: If failed to apply the patch, the project build would be failed! Must worry about applying the patch file successfully!"
-            cd ../
-            #continue # skips, don't apply the patch file
-        fi
-
-        echo "Running: git apply driver.patch"
-        git apply driver.patch
-        
-        cd ../
-        echo "Going back wfx-fullMAC-tools repo"
-    fi
+    # Check & apply driver'patch
+    git_apply_reverse_driver_patch 1 $project
     
     # Create the output project folder containing all board-support generated projects
     mkdir out_$project && mkdir ./$OUT_FOLDER/out_$project
@@ -229,7 +275,7 @@ do
         fi
 
         # Check & apply git patch file. Calling this before project generation
-        git_apply_reverse_patch 1 $board_id $project
+        git_apply_reverse_app_patch 1 $board_id $project
 
         # Creating a output folder containing generated project
         BRD_PRJ_NAME=${board_id}_${project}
@@ -247,7 +293,7 @@ do
 
         # Copy the config_files to override the default config files. Called this
         # function after project generation & the project is patched
-        if [ $IS_PATCHED -eq 1 ]
+        if [ $IS_APP_PATCHED -eq 1 ]
         then   
             override_config_files $board_id $project_name
         fi
@@ -270,12 +316,16 @@ do
         cd ../../
 
         # Reverse git apply patch.
-        if [ $IS_PATCHED -eq 1 ]
+        if [ $IS_APP_PATCHED -eq 1 ]
         then   
-            git_apply_reverse_patch 0 $board_id $project
+            git_apply_reverse_app_patch 0 $board_id $project
         fi
     done
+    
 done
+
+# Reverse driver applied patch
+git_apply_reverse_driver_patch 0 $PATCH_APPs
 
 ##### PACKAGING THE BINARY OUTPUT FILES #####
 tar -cvf $OUT_FOLDER.tar.gz $OUT_FOLDER/*
