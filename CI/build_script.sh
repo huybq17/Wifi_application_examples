@@ -169,7 +169,9 @@ git_apply_reverse_app_patch() {
             cd ./$project_name
             echo "git apply --check ./patches/$PATCH_BOARDs/app.patch"
             git apply --check ./patches/$PATCH_BOARDs/app.patch
-            echo "git apply ./patches/brd4187/app.patch"
+            echo "git apply --stat ./patches/$PATCH_BOARDs/app.patch"
+            git apply --stat ./patches/$PATCH_BOARDs/app.patch
+            echo "git apply ./patches/$PATCH_BOARDs/app.patch"
             git apply ./patches/$PATCH_BOARDs/app.patch
             cd ../
             IS_APP_PATCHED=1 #patched
@@ -217,8 +219,14 @@ then
         exit 1
     fi
 fi
-echo "Going to ./gecko_sdk directory & git pull"
+echo "Going to ./gecko_sdk directory & git reset & git pull"
 cd ./gecko_sdk
+echo "Checking if having driver.patch!"
+if [ -f driver.patch ]
+then
+    git apply -R driver.patch
+    rm -rf driver.patch
+fi
 git reset --hard
 git lfs pull origin
 git log -n3
