@@ -165,7 +165,7 @@ git_apply_reverse_app_patch() {
         then
             # Apply "application" patch to the source project if brd4187a/b/c
         
-            echo "Going into $project_name to apply patch ...."
+            echo "Going into $project_name to apply application patch ...."
             cd ./$project_name
             echo "git apply --check ./patches/$PATCH_BOARDs/app.patch"
             git apply --check ./patches/$PATCH_BOARDs/app.patch
@@ -183,6 +183,8 @@ git_apply_reverse_app_patch() {
             cd ../
             IS_APP_PATCHED=0 #not_patched
         fi
+    else
+        echo "The $project_name has no application patch file!"
     fi
 }
 
@@ -285,7 +287,7 @@ do
         fi
 
         # Check & apply git patch file. Calling this before project generation
-        echo "Check & apply app patch!"
+        echo "Checking application patch of the $project project!"
         git_apply_reverse_app_patch 1 $board_id $project
 
         # Creating a output folder containing generated project
@@ -326,7 +328,7 @@ do
         echo "===================> Finished <=================="
         cd ../../
 
-        # Reverse git apply patch.
+        # Reverse git applied application patch.
         if [ $IS_APP_PATCHED -eq 1 ]
         then   
             git_apply_reverse_app_patch 0 $board_id $project
