@@ -88,7 +88,7 @@ git_apply_reverse_driver_patch() {
     if [ ! -f ./$project_name/patches/driver.patch ]
     then    
         echo "Not found ./$project_name/patches/driver.patch!"
-        continue
+        return
     fi
 
     if [ $apply_or_reverse -eq 1 ]
