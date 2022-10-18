@@ -5,6 +5,8 @@ export PATH=$PATH:$AGENT_WORKSPACE/slc_cli
 echo "PROJECTS_NAME = $PROJECTS_NAME"
 echo "AGENT_WORKSPACE = $AGENT_WORKSPACE"
 echo "BOARD_IDs = $BOARD_IDs"
+echo "PATCH_BOARDs = $PATCH_BOARDs"
+echo "PATCH_APPs = $PATCH_BOARDs"
 echo "GIT_BRANCH = $GIT_BRANCH"
 echo "GIT_COMMIT = $GIT_COMMIT"
 
@@ -217,6 +219,7 @@ then
 fi
 echo "Going to ./gecko_sdk directory & git pull"
 cd ./gecko_sdk
+git reset --hard
 git lfs pull origin
 git log -n3
 GSDK_BRANCH=`git rev-parse --abbrev-ref HEAD`
@@ -273,6 +276,7 @@ do
         fi
 
         # Check & apply git patch file. Calling this before project generation
+        echo "Check & apply app patch!"
         git_apply_reverse_app_patch 1 $board_id $project
 
         # Creating a output folder containing generated project
