@@ -111,8 +111,6 @@ git_apply_reverse_driver_patch() {
                 echo "#NOTICE: There are 02 possibilities of errors: Failed to apply or already applied driver patch file of the $project project!!!"
                 echo "#WARNING: If the patch have been already applied, the project can be built successfully! Don't worry!"
                 echo "#ERROR: If failed to apply the patch, the project build would be failed! Must worry about applying the patch file successfully!"
-                cd ../
-                #continue # skips, don't apply the patch file
             fi
 
             echo "Running: git apply driver.patch"
