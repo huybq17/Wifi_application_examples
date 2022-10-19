@@ -1,5 +1,5 @@
 diff --git a/multiprotocol_micriumos/multiprotocol_micriumos.slcp b/multiprotocol_micriumos/multiprotocol_micriumos.slcp
-index 1a79407..24a9b25 100644
+index 1a79407..2edc74c 100644
 --- a/multiprotocol_micriumos/multiprotocol_micriumos.slcp
 +++ b/multiprotocol_micriumos/multiprotocol_micriumos.slcp
 @@ -21,6 +21,8 @@ component:
@@ -83,3 +83,11 @@ index 1a79407..24a9b25 100644
  
  configuration:
    - name: SL_STACK_SIZE
+@@ -201,6 +179,7 @@ configuration:
+     condition: [dmd_memlcd]
+ define:
+   - name: DEBUG_EFM
++  - name: IPERF_SERVER
+ tag:
+   - hardware:rf:band:2400
+   - hardware:component:led:2+
