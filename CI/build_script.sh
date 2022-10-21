@@ -307,10 +307,10 @@ do
         fi
 
         # Copy the config_files to override the default config files. Called this
-        # function after project generation & the project is patched
+        # function after project generation & the project's app patch file is applied
         if [ $IS_APP_PATCHED -eq 1 ]
         then
-            echo "Checkinng & overriding the default config header file by ours! "
+            echo "Checking & overriding the default config header file by ours! "
             override_config_files $board_id $project
         fi
 
