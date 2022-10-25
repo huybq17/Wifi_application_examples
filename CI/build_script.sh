@@ -115,8 +115,8 @@ git_apply_reverse_driver_patch() {
                 echo "#ERROR: If failed to apply the patch, the project build would be failed! Must worry about applying the patch file successfully!"
             fi
 
-            echo "Running: git apply driver.patch"
-            git apply driver.patch
+            echo "Running: git apply --whitespaces=fix driver.patch"
+            git apply --whitespace=fix driver.patch
             
             cd ../
             echo "Going back wfx-fullMAC-tools repo"
@@ -133,7 +133,7 @@ git_apply_reverse_driver_patch() {
             echo "Going to gecko_sdk folder & reversing driver.patch file to wfx-fmac-driver component!"
             cd ./gecko_sdk
             echo "Running: git apply -R driver.patch"
-            git apply -R driver.patch
+            git apply --whitespace=fix -R driver.patch
             
             cd ../
             echo "Going back wfx-fullMAC-tools repo"
@@ -171,15 +171,15 @@ git_apply_reverse_app_patch() {
             git apply --check ./patches/$PATCH_BOARDs/app.patch
             echo "git apply --stat ./patches/$PATCH_BOARDs/app.patch"
             git apply --stat ./patches/$PATCH_BOARDs/app.patch
-            echo "git apply ./patches/$PATCH_BOARDs/app.patch"
-            git apply ./patches/$PATCH_BOARDs/app.patch
+            echo "git apply --whitespace=fix ./patches/$PATCH_BOARDs/app.patch"
+            git apply --whitespace=fix ./patches/$PATCH_BOARDs/app.patch
             cd ../
             IS_APP_PATCHED=1 #patched
         else
             echo "Going into $project_name to reverse applied patch file...."
             cd ./$project_name
-            echo "git apply -R ./patches/$PATCH_BOARDs/app.patch"
-            git apply -R ./patches/$PATCH_BOARDs/app.patch
+            echo "git apply --whitespace=fix -R ./patches/$PATCH_BOARDs/app.patch"
+            git apply --whitespace=fix -R ./patches/$PATCH_BOARDs/app.patch
             cd ../
             IS_APP_PATCHED=0 #not_patched
         fi
@@ -229,7 +229,7 @@ echo "Checking if having driver.patch!"
 if [ -f driver.patch ]
 then
     echo "There is driver.patch inside gecko_sdk! Git reverse"
-    git apply -R driver.patch
+    git apply --whitespace=fix -R driver.patch
     rm -rf driver.patch
 fi
 git reset --hard
@@ -293,7 +293,13 @@ do
         git_apply_reverse_app_patch 1 $board_id $project
 
         # Creating a output folder containing generated project
-        BRD_PRJ_NAME=${board_id}_${project}
+        if [ $IS_APP_PATCHED -eq 1 ]
+        then
+            BRD_PRJ_NAME=${board_id}_${project}_patched
+        else
+            BRD_PRJ_NAME=${board_id}_${project}
+        fi
+        
         mkdir ./out_$project/$BRD_PRJ_NAME
 
         # Generating the projects by slcp tool
