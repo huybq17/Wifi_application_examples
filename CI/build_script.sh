@@ -115,7 +115,7 @@ git_apply_reverse_driver_patch() {
                 echo "#ERROR: If failed to apply the patch, the project build would be failed! Must worry about applying the patch file successfully!"
             fi
 
-            echo "Running: git apply --whitespaces=fix driver.patch"
+            echo "Running: git apply --whitespace=fix driver.patch"
             git apply --whitespace=fix driver.patch
             
             cd ../
@@ -132,7 +132,7 @@ git_apply_reverse_driver_patch() {
             # Driver's patch is applied --> reverse now.            
             echo "Going to gecko_sdk folder & reversing driver.patch file to wfx-fmac-driver component!"
             cd ./gecko_sdk
-            echo "Running: git apply -R driver.patch"
+            echo "Running: git apply --whitespace=fix -R driver.patch"
             git apply --whitespace=fix -R driver.patch
             
             cd ../
